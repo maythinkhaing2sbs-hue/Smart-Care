@@ -1,6 +1,6 @@
 :host { display: block; background: var(--sc-bg); }
 
-.landing { padding-top: var(--sc-nav-h); }
+.landing { padding-top: 0; }
 
 /* ==========================================================================
    HERO  — full-bleed editorial banner with background image
@@ -25,7 +25,7 @@
   position: absolute;
   inset: 0;
   z-index: 0;
-  background-image: url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=2400&q=80');
+  background-image: url('/Image/banner.png');
   background-size: cover;
   background-position: right center;
 
@@ -52,14 +52,14 @@
 .hero-inner {
   position: relative;
   z-index: 2;
-  padding-top: 32px;
+  padding-top: calc(var(--sc-nav-h) + 32px);
   padding-bottom: 36px;
   min-height: 640px;
   display: flex;
   flex-direction: column;
 
   @media (max-width: 768px) {
-    padding-top: 24px;
+    padding-top: calc(var(--sc-nav-h) + 24px);
     padding-bottom: 28px;
     min-height: 560px;
   }
@@ -203,8 +203,17 @@
   gap: 24px;
   flex-wrap: wrap;
   margin-top: auto;
-  padding-top: 24px;
-  border-top: 1px solid rgba(20, 53, 102, 0.10);
+  padding: 16px 24px;
+  background: rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: var(--sc-radius);
+  box-shadow: 0 10px 30px rgba(20, 53, 102, 0.10);
+
+  @media (max-width: 768px) {
+    padding: 14px 18px;
+  }
 }
 
 .play-btn {
