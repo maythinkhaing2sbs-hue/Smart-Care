@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LucideAngularModule, Stethoscope, Building2, CalendarCheck, Plane, Star, ArrowRight, ShieldCheck, HeartPulse, MessageSquare, Globe, Search, MessageCircle, Award, Users, MapPin } from 'lucide-angular';
+import { LucideAngularModule, Stethoscope, Building2, CalendarCheck, Plane, Star, ArrowRight, ShieldCheck, HeartPulse, MessageSquare, Globe, Search, MessageCircle, Award, Users, MapPin, Play } from 'lucide-angular';
 
 import { NavbarComponent } from '../../shared/navbar/navbar.component';
 import { SearchOverlayComponent } from '../../shared/search-overlay/search-overlay.component';
@@ -22,7 +22,7 @@ export class LandingComponent {
   readonly icons = {
     Stethoscope, Building2, CalendarCheck, Plane, Star, ArrowRight,
     ShieldCheck, HeartPulse, MessageSquare, Globe, Search, MessageCircle,
-    Award, Users, MapPin
+    Award, Users, MapPin, Play
   };
 
   services = [
@@ -45,6 +45,14 @@ export class LandingComponent {
     { value: '40+', label: 'Specialties' },
     { value: '15+', label: 'Countries' },
     { value: '50K+', label: 'Patients Served' }
+  ];
+
+  accreditations = [
+    { name: 'JCI', sub: 'Joint Commission Intl.' },
+    { name: 'ISO 9001', sub: 'Quality Management' },
+    { name: 'NABH', sub: 'Indian Hospital Board' },
+    { name: 'JCAHO', sub: 'US Accreditation' },
+    { name: 'HIPAA', sub: 'Data Protection' }
   ];
 
   features = [
