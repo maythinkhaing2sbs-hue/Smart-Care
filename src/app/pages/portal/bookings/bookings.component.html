@@ -10,25 +10,34 @@
     </button>
   </header>
 
-  <!-- Tabs -->
-  <div class="tabs">
-    @for (t of ['Upcoming', 'Completed', 'Cancelled']; track t) {
-      <button [class.active]="filter() === t" (click)="setFilter($any(t))">
-        {{ t }}
+  <!-- Tabs with counts -->
+  <div class="tab-strip">
+    @for (t of tabs; track t.key) {
+      <button [class.active]="filter() === t.key" (click)="setFilter(t.key)">
+        <lucide-icon [img]="t.icon" size="14"></lucide-icon>
+        <span class="tab-label">{{ t.label }}</span>
+        <span class="tab-count">{{ countFor(t.key) }}</span>
       </button>
     }
   </div>
 
   @if (filteredBookings().length === 0) {
-    <div class="empty sc-card">
-      <lucide-icon [img]="icons.CalendarCheck" size="40"></lucide-icon>
-      <h4>No {{ filter().toLowerCase() }} bookings</h4>
-      <p>Your {{ filter().toLowerCase() }} appointments will appear here.</p>
+    <div class="empty">
+      <div class="empty-icon"><lucide-icon [img]="icons.CalendarCheck" size="32"></lucide-icon></div>
+      <h4>No {{ filter() === 'All' ? '' : filter().toLowerCase() + ' ' }}bookings</h4>
+      <p>Your {{ filter() === 'All' ? '' : filter().toLowerCase() + ' ' }}appointments will appear here.</p>
+      <button class="btn btn-outline btn-sm" routerLink="/portal/hospitals">
+        <lucide-icon [img]="icons.CalendarCheck" size="14"></lucide-icon> Book Appointment
+      </button>
     </div>
   } @else {
     <div class="booking-list">
       @for (b of filteredBookings(); track b.id) {
-        <div class="booking-card sc-card sc-card-hover">
+        <a class="booking-card"
+           [attr.data-status]="b.status"
+           [routerLink]="['/portal/hospitals', b.hospitalId]">
+          <span class="bk-stripe"></span>
+
           <img [src]="b.hospitalImage" [alt]="b.hospitalName" class="hosp-img">
 
           <div class="bk-body">
@@ -37,35 +46,44 @@
               <span class="badge"
                     [class.badge-success]="b.status === 'Confirmed'"
                     [class.badge-warning]="b.status === 'Pending'"
-                    [class.badge-info]="b.status === 'Completed'"
                     [class.badge-danger]="b.status === 'Cancelled'">
+                <span class="badge-dot"></span>
                 {{ b.status }}
               </span>
             </div>
 
             <div class="bk-doctor">
-              <lucide-icon [img]="icons.Stethoscope" size="14"></lucide-icon>
+              <lucide-icon [img]="icons.Stethoscope" size="13"></lucide-icon>
               {{ b.doctorName }} <span>· {{ b.doctorSpecialty }}</span>
             </div>
 
             <div class="bk-meta">
-              <span><lucide-icon [img]="icons.CalendarCheck" size="14"></lucide-icon> {{ b.date }}</span>
-              <span><lucide-icon [img]="icons.Clock" size="14"></lucide-icon> {{ b.time }}</span>
-              <span class="num">Booking ID: <strong>{{ b.bookingNumber }}</strong></span>
+              <span class="bk-meta-item">
+                <lucide-icon [img]="icons.CalendarCheck" size="12"></lucide-icon> {{ b.date }}
+              </span>
+              <span class="bk-meta-item">
+                <lucide-icon [img]="icons.Clock" size="12"></lucide-icon> {{ b.time }}
+              </span>
+              <span class="bk-meta-item id">
+                <lucide-icon [img]="icons.Hash" size="12"></lucide-icon>
+                <strong>{{ b.bookingNumber }}</strong>
+              </span>
             </div>
           </div>
 
           <div class="bk-actions">
-            <button class="btn btn-outline btn-sm">
-              <lucide-icon [img]="icons.Eye" size="14"></lucide-icon> Details
-            </button>
-            @if (b.status === 'Confirmed' || b.status === 'Pending') {
-              <button class="btn btn-ghost btn-sm cancel">
-                <lucide-icon [img]="icons.X" size="14"></lucide-icon> Cancel
+            @if (b.status === 'Pending') {
+              <button class="btn-icon cancel" (click)="cancelBooking(b, $event)">
+                <lucide-icon [img]="icons.X" size="13"></lucide-icon>
+                Cancel
               </button>
+            } @else {
+              <span class="bk-arrow" aria-hidden="true">
+                <lucide-icon [img]="icons.ChevronRight" size="16"></lucide-icon>
+              </span>
             }
           </div>
-        </div>
+        </a>
       }
     </div>
   }

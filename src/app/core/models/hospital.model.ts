@@ -50,7 +50,7 @@ export interface Booking {
   doctorSpecialty: string;
   date: string;
   time: string;
-  status: 'Confirmed' | 'Pending' | 'Completed' | 'Cancelled';
+  status: 'Pending' | 'Confirmed' | 'Cancelled';
   bookingNumber: string;
 }
 
