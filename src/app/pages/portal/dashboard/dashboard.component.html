@@ -18,32 +18,6 @@
     </div>
   </header>
 
-  <!-- Journey progress -->
-  <section class="journey-card">
-    <div class="jc-head">
-      <div>
-        <h3>Your Journey</h3>
-        <p class="muted">You're on step 1 of 6 — keep going.</p>
-      </div>
-      <span class="badge badge-info">17% complete</span>
-    </div>
-    <div class="stepper">
-      @for (s of journey; track s.label; let i = $index; let last = $last) {
-        <div class="step-item" [class.done]="s.status === 'done'" [class.current]="s.status === 'in-progress'">
-          <div class="step-circle">
-            @if (s.status === 'done') {
-              <lucide-icon [img]="icons.CheckCircle2" size="14"></lucide-icon>
-            } @else {
-              <span>{{ i + 1 }}</span>
-            }
-          </div>
-          <div class="step-label">{{ s.label }}</div>
-          @if (!last) { <div class="step-line"></div> }
-        </div>
-      }
-    </div>
-  </section>
-
   <!-- KPI strip -->
   <section class="kpi-strip">
     @for (k of kpis; track k.label) {
