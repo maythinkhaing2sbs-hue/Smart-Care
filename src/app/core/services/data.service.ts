@@ -191,7 +191,7 @@ export class DataService {
       doctorSpecialty: 'Cardiac Surgeon',
       date: '2026-02-10',
       time: '09:00 AM',
-      status: 'Completed',
+      status: 'Confirmed',
       bookingNumber: 'MT-240210-00789'
     }
   ]);
