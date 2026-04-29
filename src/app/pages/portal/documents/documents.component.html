@@ -1,0 +1,51 @@
+<div class="page">
+  <header class="page-head">
+    <div>
+      <h2>Documents</h2>
+      <p class="muted">Securely upload and manage your medical records.</p>
+    </div>
+    <button class="btn btn-primary" (click)="triggerUpload()">
+      <lucide-icon [img]="icons.Upload" size="16"></lucide-icon>
+      Upload Document
+    </button>
+  </header>
+
+  <!-- Upload zone -->
+  <div class="upload-zone sc-card" (click)="triggerUpload()">
+    <div class="up-icon"><lucide-icon [img]="icons.Upload" size="32"></lucide-icon></div>
+    <h4>Drag & drop to upload</h4>
+    <p>Supported: PDF, JPG, PNG, DOC up to 10MB. Encrypted at rest.</p>
+    <button class="btn btn-outline btn-sm">Browse Files</button>
+  </div>
+
+  <!-- Category filter -->
+  <div class="cat-tabs">
+    @for (c of categories(); track c) {
+      <button [class.active]="selectedCategory() === c" (click)="setCat(c)">{{ c }}</button>
+    }
+  </div>
+
+  <!-- Document grid -->
+  <div class="docs-grid">
+    @for (d of filtered(); track d.id) {
+      <div class="doc-card sc-card sc-card-hover">
+        <div class="doc-icon" [class.image]="d.type === 'image'" [class.pdf]="d.type === 'pdf'">
+          <lucide-icon [img]="iconFor(d.type)" size="22"></lucide-icon>
+        </div>
+        <div class="doc-body">
+          <h5>{{ d.name }}</h5>
+          <div class="doc-meta">
+            <span class="badge badge-info">{{ d.category }}</span>
+            <span class="size">{{ d.size }}</span>
+            <span class="dot">·</span>
+            <span class="date">{{ d.uploadedAt }}</span>
+          </div>
+        </div>
+        <div class="doc-actions">
+          <button class="ic-btn" aria-label="Download"><lucide-icon [img]="icons.Download" size="16"></lucide-icon></button>
+          <button class="ic-btn danger" aria-label="Delete"><lucide-icon [img]="icons.Trash2" size="16"></lucide-icon></button>
+        </div>
+      </div>
+    }
+  </div>
+</div>

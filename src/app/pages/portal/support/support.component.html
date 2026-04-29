@@ -1,0 +1,83 @@
+<div class="page">
+  <header class="page-head">
+    <div>
+      <h2>Help & Support</h2>
+      <p class="muted">We're here to help. Find answers fast or reach out to our care team.</p>
+    </div>
+  </header>
+
+  <!-- Contact channels -->
+  <div class="channels">
+    <div class="ch-card sc-card sc-card-hover">
+      <div class="ch-icon" style="background: rgba(63,114,192,0.12); color: var(--sc-secondary)"><lucide-icon [img]="icons.MessageCircle" size="22"></lucide-icon></div>
+      <h4>Live Chat</h4>
+      <p>Instant help, available 24/7</p>
+      <button class="btn btn-outline btn-sm">Start Chat</button>
+    </div>
+    <div class="ch-card sc-card sc-card-hover">
+      <div class="ch-icon" style="background: rgba(22,163,74,0.12); color: var(--sc-success)"><lucide-icon [img]="icons.Phone" size="22"></lucide-icon></div>
+      <h4>Phone Support</h4>
+      <p>+1 800 SMART CARE</p>
+      <button class="btn btn-outline btn-sm">Call Now</button>
+    </div>
+    <div class="ch-card sc-card sc-card-hover">
+      <div class="ch-icon" style="background: rgba(245,158,11,0.12); color: var(--sc-warning)"><lucide-icon [img]="icons.Mail" size="22"></lucide-icon></div>
+      <h4>Email Us</h4>
+      <p>support&#64;smartcare.com</p>
+      <button class="btn btn-outline btn-sm">Send Email</button>
+    </div>
+  </div>
+
+  <!-- FAQ + Contact form -->
+  <div class="grid">
+    <div class="sc-card faq-card">
+      <h3><lucide-icon [img]="icons.HelpCircle" size="18"></lucide-icon> Frequently Asked Questions</h3>
+      <div class="faq-list">
+        @for (f of faqs(); track f.q; let i = $index) {
+          <div class="faq" [class.open]="f.open">
+            <button class="q-btn" (click)="toggleFaq(i)">
+              <span>{{ f.q }}</span>
+              <lucide-icon [img]="icons.ChevronDown" size="16"></lucide-icon>
+            </button>
+            @if (f.open) {
+              <div class="answer sc-fade-in">{{ f.a }}</div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="sc-card form-card">
+      <h3><lucide-icon [img]="icons.Sparkles" size="18"></lucide-icon> Send us a message</h3>
+      <p class="sub">We typically respond within 4 hours.</p>
+
+      @if (submitted()) {
+        <div class="sent-msg sc-fade-in">
+          ✓ Message sent! Our team will reach out shortly.
+        </div>
+      }
+
+      <form (ngSubmit)="submitContact()" #f="ngForm">
+        <div class="sc-form-group">
+          <label class="sc-label">Name</label>
+          <input class="sc-input" type="text" name="cname" [(ngModel)]="contactName" required>
+        </div>
+        <div class="sc-form-group">
+          <label class="sc-label">Email</label>
+          <input class="sc-input" type="email" name="cemail" [(ngModel)]="contactEmail" required>
+        </div>
+        <div class="sc-form-group">
+          <label class="sc-label">Subject</label>
+          <input class="sc-input" type="text" name="csubj" [(ngModel)]="contactSubject" required>
+        </div>
+        <div class="sc-form-group">
+          <label class="sc-label">Message</label>
+          <textarea class="sc-textarea" name="cmsg" rows="5" [(ngModel)]="contactMessage" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">
+          <lucide-icon [img]="icons.Send" size="16"></lucide-icon> Send Message
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

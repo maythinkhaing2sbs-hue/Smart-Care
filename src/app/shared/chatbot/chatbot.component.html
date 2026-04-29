@@ -1,0 +1,70 @@
+<!-- Floating launcher -->
+<button class="chat-fab" [class.hidden]="ui.chatOpen()" (click)="ui.toggleChat()" aria-label="Open AI Chat">
+  <lucide-icon [img]="icons.MessageCircle" size="24"></lucide-icon>
+  <span class="pulse"></span>
+</button>
+
+<!-- Chat panel -->
+@if (ui.chatOpen()) {
+<div class="chat-panel sc-slide-in-right">
+  <header class="chat-head">
+    <div class="head-left">
+      <div class="bot-avatar">
+        <lucide-icon [img]="icons.Sparkles" size="16"></lucide-icon>
+      </div>
+      <div>
+        <div class="bot-name">Smart Care AI</div>
+        <div class="bot-status"><span class="dot"></span> Online — typically replies instantly</div>
+      </div>
+    </div>
+    <button class="close-btn" (click)="ui.closeChat()" aria-label="Close">
+      <lucide-icon [img]="icons.X" size="18"></lucide-icon>
+    </button>
+  </header>
+
+  <div class="msg-scroll" #msgScroll>
+    @for (m of messages(); track m.id) {
+      <div class="msg" [class.user]="m.role === 'user'">
+        <div class="avatar">
+          @if (m.role === 'bot') {
+            <lucide-icon [img]="icons.Bot" size="16"></lucide-icon>
+          } @else {
+            <lucide-icon [img]="icons.UserIcon" size="16"></lucide-icon>
+          }
+        </div>
+        <div class="bubble-wrap">
+          <div class="bubble" [innerHTML]="m.text.replaceAll('\n','<br>').replaceAll('**','')"></div>
+          @if (m.suggestions?.length) {
+            <div class="suggestions">
+              @for (s of m.suggestions; track s) {
+                <button class="suggestion" (click)="pickSuggestion(s)">{{ s }}</button>
+              }
+            </div>
+          }
+          @if (m.showConsultButton) {
+            <button class="consult-btn" (click)="consultWithHospital()">
+              <lucide-icon [img]="icons.Stethoscope" size="16"></lucide-icon>
+              Consult with Hospital
+              <lucide-icon [img]="icons.ArrowRight" size="14"></lucide-icon>
+            </button>
+          }
+        </div>
+      </div>
+    }
+
+    @if (isTyping()) {
+      <div class="msg">
+        <div class="avatar"><lucide-icon [img]="icons.Bot" size="16"></lucide-icon></div>
+        <div class="bubble typing"><span></span><span></span><span></span></div>
+      </div>
+    }
+  </div>
+
+  <form class="chat-input" (ngSubmit)="send()">
+    <input type="text" [ngModel]="input()" (ngModelChange)="input.set($event)" name="msg" placeholder="Describe your symptoms...">
+    <button type="submit" class="send" [disabled]="!input().trim()" aria-label="Send">
+      <lucide-icon [img]="icons.Send" size="18"></lucide-icon>
+    </button>
+  </form>
+</div>
+}

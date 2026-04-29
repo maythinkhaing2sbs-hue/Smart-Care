@@ -1,0 +1,47 @@
+@if (ui.searchOpen()) {
+<div class="search-backdrop" (click)="ui.closeSearch()"></div>
+<div class="search-panel sc-fade-in-down">
+  <div class="sc-container">
+    <div class="search-head">
+      <h3>Find your hospital, find your care</h3>
+      <button class="close" (click)="ui.closeSearch()" aria-label="Close">
+        <lucide-icon [img]="icons.X" size="18"></lucide-icon>
+      </button>
+    </div>
+
+    <form (ngSubmit)="submit()" class="search-form">
+      <div class="field">
+        <lucide-icon class="field-icon" [img]="icons.Activity" size="18"></lucide-icon>
+        <input class="sc-input" type="text" placeholder="Disease, treatment or specialty" [ngModel]="disease()" (ngModelChange)="disease.set($event)" name="disease">
+      </div>
+      <div class="field">
+        <lucide-icon class="field-icon" [img]="icons.MapPin" size="18"></lucide-icon>
+        <input class="sc-input" type="text" placeholder="City or country" [ngModel]="location()" (ngModelChange)="location.set($event)" name="location">
+      </div>
+      <button class="btn btn-primary search-submit" type="submit">
+        <lucide-icon [img]="icons.Search" size="18"></lucide-icon>
+        Search
+      </button>
+    </form>
+
+    <div class="suggestions">
+      <div class="group">
+        <span class="label">Popular specialties:</span>
+        <div class="chips">
+          @for (d of popularDiseases; track d) {
+            <button type="button" class="chip" (click)="pickDisease(d)">{{ d }}</button>
+          }
+        </div>
+      </div>
+      <div class="group">
+        <span class="label">Top destinations:</span>
+        <div class="chips">
+          @for (l of popularLocations; track l) {
+            <button type="button" class="chip" (click)="pickLocation(l)">{{ l }}</button>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+}

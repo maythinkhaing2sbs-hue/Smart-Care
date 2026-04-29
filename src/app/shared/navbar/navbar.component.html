@@ -1,0 +1,63 @@
+<nav class="navbar" [class.scrolled]="scrolled()">
+  <div class="sc-container nav-inner">
+    <!-- Brand -->
+    <a routerLink="/" class="brand" (click)="closeMobile()">
+      <div class="brand-icon"><lucide-icon [img]="icons.Heart" size="22"></lucide-icon></div>
+      <div class="brand-text">
+        <span class="brand-name">Smart Care</span>
+        <span class="brand-tag">Medical Travel Simplified</span>
+      </div>
+    </a>
+
+    <!-- Desktop nav links -->
+    <ul class="nav-links hide-mobile">
+      <li><a href="#home" (click)="closeMobile()">Home</a></li>
+      <li><a href="#about" (click)="closeMobile()">About</a></li>
+      <li><a href="#services" (click)="closeMobile()">Services</a></li>
+      <li><a href="#how" (click)="closeMobile()">How it Works</a></li>
+      <li><a href="#hospitals" (click)="closeMobile()">Hospitals</a></li>
+    </ul>
+
+    <!-- Right cluster -->
+    <div class="nav-actions">
+      <button class="icon-btn" (click)="toggleSearch()" aria-label="Search">
+        <lucide-icon [img]="icons.Search" size="20"></lucide-icon>
+      </button>
+
+      @if (auth.isLoggedIn()) {
+        <div class="user-cluster">
+          <button class="user-btn" (click)="toggleUserMenu()">
+            <img [src]="auth.user()!.avatar" [alt]="auth.user()!.name">
+            <span class="hide-mobile">{{ auth.user()!.name }}</span>
+          </button>
+          @if (userMenuOpen()) {
+            <div class="user-menu sc-fade-in-down">
+              <button (click)="goToPortal()"><lucide-icon [img]="icons.LayoutDashboard" size="16"></lucide-icon> Go to Portal</button>
+              <button (click)="logout()"><lucide-icon [img]="icons.LogOut" size="16"></lucide-icon> Sign Out</button>
+            </div>
+          }
+        </div>
+      } @else {
+        <button class="btn btn-primary hide-mobile" (click)="openRegister()">Register Now</button>
+      }
+
+      <button class="icon-btn hide-desktop" (click)="toggleMobile()" aria-label="Menu">
+        <lucide-icon [img]="mobileOpen() ? icons.X : icons.Menu" size="22"></lucide-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile drawer -->
+  @if (mobileOpen()) {
+    <div class="mobile-drawer sc-fade-in-down hide-desktop">
+      <a href="#home" (click)="closeMobile()">Home</a>
+      <a href="#about" (click)="closeMobile()">About</a>
+      <a href="#services" (click)="closeMobile()">Services</a>
+      <a href="#how" (click)="closeMobile()">How it Works</a>
+      <a href="#hospitals" (click)="closeMobile()">Hospitals</a>
+      @if (!auth.isLoggedIn()) {
+        <button class="btn btn-primary btn-block" (click)="openRegister()">Register Now</button>
+      }
+    </div>
+  }
+</nav>

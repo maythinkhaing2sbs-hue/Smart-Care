@@ -1,0 +1,217 @@
+<div class="page">
+  <header class="page-head">
+    <div>
+      <h2>Trip Plan</h2>
+      <p class="muted">Track your departure countdown and manage your travel arrangements.</p>
+    </div>
+    <span class="reminder-tag">
+      <lucide-icon [img]="icons.Bell" size="14"></lucide-icon>
+      Travel Reminder Active
+    </span>
+  </header>
+
+  <!-- ============================================== -->
+  <!-- COMPACT TIME REMINDER  (only after trip saved)  -->
+  <!-- ============================================== -->
+  @if (tripSaved()) {
+    <section class="reminder-card" [attr.data-urgency]="urgency()">
+      <!-- Watermark airplane -->
+      <div class="rc-watermark">
+        <lucide-icon [img]="icons.Plane" size="240"></lucide-icon>
+      </div>
+
+      <div class="rc-grid">
+        <!-- LEFT — route -->
+        <div class="rc-section rc-route">
+          <div class="rc-icon-circle">
+            <lucide-icon [img]="travelMode() === 'Flight' ? icons.Plane : icons.Car" size="16"></lucide-icon>
+          </div>
+          <div class="rc-route-info">
+            <div class="rc-eyebrow">
+              <span class="rc-status-dot"></span>
+              Active Trip · TR-{{ data.trip().id.toUpperCase() }}
+            </div>
+            <div class="rc-route-val">{{ fromLocation() }} <span class="rc-arrow">→</span> {{ toLocation() }}</div>
+            <div class="rc-route-sub">{{ date() }} · {{ time() }} · {{ travelMode() }}</div>
+          </div>
+        </div>
+
+        <!-- DIVIDER -->
+        <div class="rc-divider hide-mobile"></div>
+
+        <!-- CENTER — countdown (focal) -->
+        <div class="rc-section rc-countdown">
+          <div class="rc-lbl">Time Remaining</div>
+          @if (!countdown().expired) {
+            <div class="rc-timer">
+              <span class="rc-num">{{ pad(countdown().days) }}<small>d</small></span>
+              <span class="rc-sep">:</span>
+              <span class="rc-num">{{ pad(countdown().hours) }}<small>h</small></span>
+              <span class="rc-sep">:</span>
+              <span class="rc-num">{{ pad(countdown().minutes) }}<small>m</small></span>
+              <span class="rc-sep subtle">:</span>
+              <span class="rc-num subtle">{{ pad(countdown().seconds) }}<small>s</small></span>
+            </div>
+          } @else {
+            <div class="rc-expired">
+              <lucide-icon [img]="icons.AlertCircle" size="14"></lucide-icon>
+              Trip date has passed
+            </div>
+          }
+        </div>
+
+        <!-- DIVIDER -->
+        <div class="rc-divider hide-mobile"></div>
+
+        <!-- RIGHT — status + progress -->
+        <div class="rc-section rc-status-col">
+          <div class="rc-lbl">Status</div>
+          <div class="rc-status-text">{{ urgencyMessage() }}</div>
+          <div class="rc-progress">
+            <div class="rc-bar">
+              <div class="rc-bar-fill" [style.width.%]="progressPercent()"></div>
+            </div>
+            <span class="rc-progress-text">{{ progressPercent() }}% to departure</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  }
+
+  <!-- ============================================== -->
+  <!-- TWO COLUMNS — Trip History (left) + Plan Mgmt -->
+  <!-- ============================================== -->
+  <div class="trip-grid">
+    <!-- LEFT — Trip History -->
+    <section class="history-section">
+      <header class="hist-head">
+        <div class="hh-left">
+          <div class="hh-icon"><lucide-icon [img]="icons.History" size="16"></lucide-icon></div>
+          <div>
+            <h3>Trip History</h3>
+            <p class="muted">{{ tripHistory.length }} past medical journey{{ tripHistory.length === 1 ? '' : 's' }}</p>
+          </div>
+        </div>
+        <button class="link-btn">
+          View All
+          <lucide-icon [img]="icons.ChevronRight" size="14"></lucide-icon>
+        </button>
+      </header>
+
+      <div class="history-list">
+        @for (t of tripHistory; track t.id) {
+          <div class="hist-item">
+            <div class="hi-mode">
+              <lucide-icon [img]="t.mode === 'Flight' ? icons.Plane : icons.Car" size="15"></lucide-icon>
+            </div>
+            <div class="hi-body">
+              <div class="hi-top">
+                <h4 class="hi-dest">{{ t.destination }}</h4>
+                <span class="badge"
+                      [class.badge-success]="t.status === 'Completed'"
+                      [class.badge-danger]="t.status === 'Cancelled'">
+                  {{ t.status }}
+                </span>
+              </div>
+              <div class="hi-hosp">
+                <lucide-icon [img]="icons.Stethoscope" size="11"></lucide-icon>
+                {{ t.hospital }}
+              </div>
+              <div class="hi-meta">
+                <span class="hi-date">
+                  <lucide-icon [img]="icons.Calendar" size="11"></lucide-icon>
+                  {{ t.date }} → {{ t.returnDate }}
+                </span>
+                <span class="hi-id">{{ t.id }}</span>
+              </div>
+            </div>
+            <button class="hi-view" aria-label="View trip">
+              <lucide-icon [img]="icons.ChevronRight" size="16"></lucide-icon>
+            </button>
+          </div>
+        }
+      </div>
+    </section>
+
+    <!-- RIGHT — Plan Management -->
+    <div class="plan-card">
+      <header class="pc-head">
+        <h3>Trip Plan</h3>
+        <p class="muted">Update your travel details below.</p>
+      </header>
+
+      <form (ngSubmit)="saveTrip()" class="pc-form" #f="ngForm">
+        <div class="sc-form-group">
+          <label class="sc-label">From</label>
+          <div class="input-icon">
+            <lucide-icon [img]="icons.MapPin" size="14"></lucide-icon>
+            <input class="sc-input" type="text" name="from"
+                   [ngModel]="fromLocation()" (ngModelChange)="fromLocation.set($event)"
+                   placeholder="Origin city">
+          </div>
+        </div>
+
+        <div class="sc-form-group">
+          <label class="sc-label">To</label>
+          <div class="input-icon">
+            <lucide-icon [img]="icons.MapPin" size="14"></lucide-icon>
+            <input class="sc-input" type="text" name="to"
+                   [ngModel]="toLocation()" (ngModelChange)="toLocation.set($event)"
+                   placeholder="Destination city">
+          </div>
+        </div>
+
+        <div class="row-2">
+          <div class="sc-form-group">
+            <label class="sc-label">Date</label>
+            <div class="input-icon">
+              <lucide-icon [img]="icons.Calendar" size="14"></lucide-icon>
+              <input class="sc-input" type="date" name="date"
+                     [ngModel]="date()" (ngModelChange)="date.set($event)">
+            </div>
+          </div>
+          <div class="sc-form-group">
+            <label class="sc-label">Time</label>
+            <div class="input-icon">
+              <lucide-icon [img]="icons.Clock" size="14"></lucide-icon>
+              <input class="sc-input" type="time" name="time"
+                     [ngModel]="time()" (ngModelChange)="time.set($event)">
+            </div>
+          </div>
+        </div>
+
+        <div class="sc-form-group">
+          <label class="sc-label">Travel Mode</label>
+          <div class="mode-toggle">
+            <button type="button"
+                    class="mt-btn"
+                    [class.active]="travelMode() === 'Car'"
+                    (click)="setMode('Car')">
+              <lucide-icon [img]="icons.Car" size="18"></lucide-icon>
+              <span>Car</span>
+            </button>
+            <button type="button"
+                    class="mt-btn"
+                    [class.active]="travelMode() === 'Flight'"
+                    (click)="setMode('Flight')">
+              <lucide-icon [img]="icons.Plane" size="18"></lucide-icon>
+              <span>Flight</span>
+            </button>
+          </div>
+        </div>
+
+        @if (saved()) {
+          <div class="saved-msg sc-fade-in">
+            <lucide-icon [img]="icons.CheckCircle2" size="14"></lucide-icon>
+            Trip plan saved successfully
+          </div>
+        }
+
+        <button type="submit" class="btn btn-primary btn-block btn-lg save-btn">
+          <lucide-icon [img]="icons.Save" size="16"></lucide-icon>
+          Save
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

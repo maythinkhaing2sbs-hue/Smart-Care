@@ -1,0 +1,178 @@
+<div class="chat-page">
+  @if (drawerOpen()) {
+    <div class="drawer-backdrop hide-desktop" (click)="drawerOpen.set(false)"></div>
+  }
+
+  <!-- HISTORY SIDEBAR -->
+  <aside class="history-sidebar" [class.open]="drawerOpen()">
+    <header class="hs-head">
+      <div class="hs-title">
+        <lucide-icon [img]="icons.MessageSquare" size="16"></lucide-icon>
+        <h3>Consultations</h3>
+      </div>
+      <button class="hs-close hide-desktop" (click)="drawerOpen.set(false)" aria-label="Close">
+        <lucide-icon [img]="icons.X" size="16"></lucide-icon>
+      </button>
+    </header>
+
+    <div class="hs-list">
+      @if (sessions().length === 0) {
+        <div class="hs-empty">
+          <lucide-icon [img]="icons.MessageSquare" size="22"></lucide-icon>
+          <p>No conversations yet.<br>Start a new chat to begin.</p>
+        </div>
+      }
+
+      @for (group of groupedSessions(); track group.label) {
+        <div class="hs-group">
+          <div class="hs-group-label">{{ group.label }}</div>
+          @for (s of group.items; track s.id) {
+            <button class="hs-item"
+                    [class.active]="s.id === activeSessionId()"
+                    (click)="selectSession(s.id)">
+              <div class="hsi-body">
+                <div class="hsi-title">{{ s.title }}</div>
+                <div class="hsi-time">{{ relativeTime(s.updatedAt) }}</div>
+              </div>
+              <button class="hsi-del" (click)="deleteSession(s.id, $event)" aria-label="Delete">
+                <lucide-icon [img]="icons.X" size="13"></lucide-icon>
+              </button>
+            </button>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="hs-foot">
+      <button class="new-chat-btn" (click)="newChat()">
+        <lucide-icon [img]="icons.Plus" size="14"></lucide-icon>
+        New Chat
+      </button>
+    </div>
+
+  </aside>
+
+  <!-- CHAT MAIN -->
+  <section class="chat-main">
+    <!-- Sticky header -->
+    <header class="cm-head">
+      <button class="drawer-toggle hide-desktop" (click)="toggleDrawer()" aria-label="Open conversations">
+        <lucide-icon [img]="icons.Menu" size="18"></lucide-icon>
+      </button>
+      <div class="cm-head-info">
+        <h2>{{ activeSession()?.title || 'New Conversation' }}</h2>
+        <span class="cm-head-sub">
+          <span class="dot"></span>
+          Smart Care AI · Educational guidance only
+        </span>
+      </div>
+    </header>
+
+    <!-- Scrollable messages area -->
+    <div class="cm-scroll" #msgScroll>
+      @if (!activeSession() || activeSession()!.messages.length === 0) {
+        <!-- GREETING -->
+        <div class="greeting sc-fade-in">
+          <div class="brand-mark">
+            <span class="brand-glow"></span>
+            <div class="brand-box">
+              <lucide-icon [img]="icons.HeartPulse" size="34"></lucide-icon>
+            </div>
+          </div>
+          <h1>{{ greetingPart() }}, {{ firstName() }}</h1>
+          <h2>How Can I <span class="accent">Assist You Today?</span></h2>
+
+          <div class="starter-grid">
+            @for (p of starterPrompts; track p) {
+              <button class="starter-card" (click)="pickStarter(p)">
+                <lucide-icon [img]="icons.Sparkles" size="14"></lucide-icon>
+                <span>{{ p }}</span>
+              </button>
+            }
+          </div>
+        </div>
+      } @else {
+        <div class="messages">
+          @for (m of activeSession()!.messages; track m.id) {
+            <div class="message"
+                 [class.user]="m.role === 'user'"
+                 [class.assistant]="m.role === 'assistant'">
+              @if (m.role === 'assistant') {
+                <div class="msg-avatar">
+                  <div class="brand-box brand-box-sm">
+                    <lucide-icon [img]="icons.HeartPulse" size="14"></lucide-icon>
+                  </div>
+                </div>
+              }
+              <div class="msg-col">
+                @if (m.role === 'assistant') {
+                  <div class="msg-name">Smart Care AI</div>
+                }
+                <div class="msg-bubble">
+                  <span class="msg-text">{{ m.content }}</span>
+                  @if (m.streaming) {
+                    <span class="cursor"></span>
+                  }
+                </div>
+
+                @if (m.hospitalSuggestion; as h) {
+                  <button class="hospital-card sc-fade-in" (click)="viewHospital(h.id)">
+                    <img [src]="h.image" [alt]="h.name">
+                    <div class="hc-info">
+                      <div class="hc-tag">Suggested Hospital</div>
+                      <div class="hc-name">{{ h.name }}</div>
+                      <div class="hc-meta">
+                        <span class="hc-spec">{{ h.specialty }}</span>
+                        <span class="hc-rate">
+                          <lucide-icon [img]="icons.Star" size="11"></lucide-icon>
+                          {{ h.rating }}
+                        </span>
+                        <span class="hc-loc">{{ h.location }}</span>
+                      </div>
+                    </div>
+                    <span class="hc-cta">
+                      View Hospital
+                      <lucide-icon [img]="icons.ArrowRight" size="14"></lucide-icon>
+                    </span>
+                  </button>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Sticky input bar -->
+    <div class="cm-input-wrap">
+      <form class="cm-input" (ngSubmit)="send()">
+        <div class="ci-row">
+          <button type="button" class="ci-icon" aria-label="Attach file">
+            <lucide-icon [img]="icons.Paperclip" size="16"></lucide-icon>
+          </button>
+          <textarea
+            class="ci-textarea"
+            placeholder="Initiate a query or send a command to the AI..."
+            rows="1"
+            [ngModel]="input()"
+            (ngModelChange)="input.set($event)"
+            (keydown.enter)="$event.preventDefault(); send()"
+            name="msg"></textarea>
+          <button type="submit"
+                  class="ci-send"
+                  [disabled]="!input().trim() || isStreaming()"
+                  aria-label="Send">
+            <lucide-icon [img]="icons.Send" size="16"></lucide-icon>
+          </button>
+        </div>
+
+        <div class="ci-toolbar">
+          <span class="ci-disclaimer">
+            <lucide-icon [img]="icons.ShieldCheck" size="12"></lucide-icon>
+            Educational guidance — not a medical diagnosis
+          </span>
+        </div>
+      </form>
+    </div>
+  </section>
+</div>

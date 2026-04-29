@@ -1,0 +1,72 @@
+<div class="page">
+  <header class="page-head">
+    <div>
+      <h2>My Bookings</h2>
+      <p class="muted">Manage your hospital appointments and consultation sessions.</p>
+    </div>
+    <button class="btn btn-primary" routerLink="/portal/hospitals">
+      <lucide-icon [img]="icons.CalendarCheck" size="16"></lucide-icon>
+      Book New Appointment
+    </button>
+  </header>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    @for (t of ['Upcoming', 'Completed', 'Cancelled']; track t) {
+      <button [class.active]="filter() === t" (click)="setFilter($any(t))">
+        {{ t }}
+      </button>
+    }
+  </div>
+
+  @if (filteredBookings().length === 0) {
+    <div class="empty sc-card">
+      <lucide-icon [img]="icons.CalendarCheck" size="40"></lucide-icon>
+      <h4>No {{ filter().toLowerCase() }} bookings</h4>
+      <p>Your {{ filter().toLowerCase() }} appointments will appear here.</p>
+    </div>
+  } @else {
+    <div class="booking-list">
+      @for (b of filteredBookings(); track b.id) {
+        <div class="booking-card sc-card sc-card-hover">
+          <img [src]="b.hospitalImage" [alt]="b.hospitalName" class="hosp-img">
+
+          <div class="bk-body">
+            <div class="bk-top">
+              <h4>{{ b.hospitalName }}</h4>
+              <span class="badge"
+                    [class.badge-success]="b.status === 'Confirmed'"
+                    [class.badge-warning]="b.status === 'Pending'"
+                    [class.badge-info]="b.status === 'Completed'"
+                    [class.badge-danger]="b.status === 'Cancelled'">
+                {{ b.status }}
+              </span>
+            </div>
+
+            <div class="bk-doctor">
+              <lucide-icon [img]="icons.Stethoscope" size="14"></lucide-icon>
+              {{ b.doctorName }} <span>· {{ b.doctorSpecialty }}</span>
+            </div>
+
+            <div class="bk-meta">
+              <span><lucide-icon [img]="icons.CalendarCheck" size="14"></lucide-icon> {{ b.date }}</span>
+              <span><lucide-icon [img]="icons.Clock" size="14"></lucide-icon> {{ b.time }}</span>
+              <span class="num">Booking ID: <strong>{{ b.bookingNumber }}</strong></span>
+            </div>
+          </div>
+
+          <div class="bk-actions">
+            <button class="btn btn-outline btn-sm">
+              <lucide-icon [img]="icons.Eye" size="14"></lucide-icon> Details
+            </button>
+            @if (b.status === 'Confirmed' || b.status === 'Pending') {
+              <button class="btn btn-ghost btn-sm cancel">
+                <lucide-icon [img]="icons.X" size="14"></lucide-icon> Cancel
+              </button>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

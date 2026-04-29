@@ -1,0 +1,131 @@
+@if (ui.authOpen()) {
+<div class="auth-overlay" (click)="close()">
+  <div class="auth-modal sc-scale-in" (click)="$event.stopPropagation()">
+    <button class="close-btn" (click)="close()" aria-label="Close">
+      <lucide-icon [img]="icons.X" size="20"></lucide-icon>
+    </button>
+
+    <div class="auth-grid">
+      <!-- Brand panel -->
+      <aside class="brand-panel">
+        <div class="brand-mark">
+          <div class="logo-circle"><lucide-icon [img]="icons.Heart" size="22"></lucide-icon></div>
+          <span class="brand-name">Smart Care</span>
+        </div>
+        <h2>Your medical journey, simplified.</h2>
+        <p>Find world-class hospitals, book appointments, and plan your travel — all in one place.</p>
+        <ul class="benefits">
+          <li><span class="dot"></span> AI-powered medical consultation</li>
+          <li><span class="dot"></span> Verified hospitals worldwide</li>
+          <li><span class="dot"></span> End-to-end trip planning</li>
+          <li><span class="dot"></span> Secure document management</li>
+        </ul>
+      </aside>
+
+      <!-- Form panel -->
+      <section class="form-panel">
+        <div class="tabs">
+          <button [class.active]="ui.authMode() === 'login'" (click)="switchMode('login')">Sign In</button>
+          <button [class.active]="ui.authMode() === 'register'" (click)="switchMode('register')">Create Account</button>
+        </div>
+
+        @if (ui.authMode() === 'login') {
+        <form (ngSubmit)="submitLogin()" #loginForm="ngForm" class="auth-form sc-fade-in">
+          <h3>Welcome back</h3>
+          <p class="subtitle">Sign in to access your medical journey.</p>
+
+          <div class="sc-form-group">
+            <label class="sc-label">Email Address</label>
+            <div class="input-with-icon">
+              <lucide-icon [img]="icons.Mail" size="18"></lucide-icon>
+              <input class="sc-input" type="email" name="email" placeholder="you@example.com" [(ngModel)]="loginEmail" required>
+            </div>
+          </div>
+
+          <div class="sc-form-group">
+            <label class="sc-label">Password</label>
+            <div class="input-with-icon">
+              <lucide-icon [img]="icons.Lock" size="18"></lucide-icon>
+              <input class="sc-input" [type]="showPassword() ? 'text' : 'password'" name="password" placeholder="••••••••" [(ngModel)]="loginPassword" required>
+              <button type="button" class="eye-btn" (click)="togglePassword()" aria-label="Toggle password visibility">
+                <lucide-icon [img]="showPassword() ? icons.EyeOff : icons.Eye" size="16"></lucide-icon>
+              </button>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <label class="checkbox"><input type="checkbox"> <span>Remember me</span></label>
+            <a href="#" class="forgot">Forgot password?</a>
+          </div>
+
+          @if (error()) { <div class="error-msg">{{ error() }}</div> }
+
+          <button type="submit" class="btn btn-primary btn-block btn-lg" [disabled]="loading()">
+            {{ loading() ? 'Signing in...' : 'Sign In' }}
+          </button>
+
+          <div class="switch-prompt">
+            New to Smart Care? <a (click)="switchMode('register')">Create an account</a>
+          </div>
+        </form>
+        } @else {
+        <form (ngSubmit)="submitRegister()" #regForm="ngForm" class="auth-form sc-fade-in">
+          <h3>Create your account</h3>
+          <p class="subtitle">Start your medical journey today.</p>
+
+          <div class="sc-form-group">
+            <label class="sc-label">Full Name</label>
+            <div class="input-with-icon">
+              <lucide-icon [img]="icons.User" size="18"></lucide-icon>
+              <input class="sc-input" type="text" name="name" placeholder="Sarah Johnson" [(ngModel)]="regName" required>
+            </div>
+          </div>
+
+          <div class="sc-form-group">
+            <label class="sc-label">Email Address</label>
+            <div class="input-with-icon">
+              <lucide-icon [img]="icons.Mail" size="18"></lucide-icon>
+              <input class="sc-input" type="email" name="regEmail" placeholder="you@example.com" [(ngModel)]="regEmail" required>
+            </div>
+          </div>
+
+          <div class="sc-form-group">
+            <label class="sc-label">Phone (optional)</label>
+            <div class="input-with-icon">
+              <lucide-icon [img]="icons.Phone" size="18"></lucide-icon>
+              <input class="sc-input" type="tel" name="phone" placeholder="+1 555 000 0000" [(ngModel)]="regPhone">
+            </div>
+          </div>
+
+          <div class="sc-form-group">
+            <label class="sc-label">Password</label>
+            <div class="input-with-icon">
+              <lucide-icon [img]="icons.Lock" size="18"></lucide-icon>
+              <input class="sc-input" [type]="showPassword() ? 'text' : 'password'" name="regPassword" placeholder="At least 8 characters" [(ngModel)]="regPassword" required>
+              <button type="button" class="eye-btn" (click)="togglePassword()" aria-label="Toggle password visibility">
+                <lucide-icon [img]="showPassword() ? icons.EyeOff : icons.Eye" size="16"></lucide-icon>
+              </button>
+            </div>
+          </div>
+
+          <label class="checkbox terms">
+            <input type="checkbox" [(ngModel)]="agreeTerms" name="agree">
+            <span>I agree to the <a href="#">Terms</a> and <a href="#">Privacy Policy</a></span>
+          </label>
+
+          @if (error()) { <div class="error-msg">{{ error() }}</div> }
+
+          <button type="submit" class="btn btn-primary btn-block btn-lg" [disabled]="loading()">
+            {{ loading() ? 'Creating account...' : 'Create Account' }}
+          </button>
+
+          <div class="switch-prompt">
+            Already have an account? <a (click)="switchMode('login')">Sign in</a>
+          </div>
+        </form>
+        }
+      </section>
+    </div>
+  </div>
+</div>
+}

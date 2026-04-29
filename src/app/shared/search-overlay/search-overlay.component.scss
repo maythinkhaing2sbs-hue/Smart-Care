@@ -1,0 +1,118 @@
+:host { display: contents; }
+
+.search-backdrop {
+  position: fixed;
+  top: var(--sc-nav-h);
+  left: 0; right: 0; bottom: 0;
+  background: rgba(15, 28, 51, 0.35);
+  backdrop-filter: blur(2px);
+  z-index: 90;
+  animation: scFadeIn .25s ease both;
+}
+
+.search-panel {
+  position: fixed;
+  top: var(--sc-nav-h);
+  left: 0; right: 0;
+  background: var(--sc-white);
+  border-bottom: 1px solid var(--sc-border);
+  box-shadow: var(--sc-shadow-lg);
+  z-index: 95;
+  padding: 32px 0;
+}
+
+.search-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+
+  h3 {
+    margin: 0;
+    font-size: 1.3rem;
+    color: var(--sc-primary);
+  }
+
+  .close {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 1px solid var(--sc-border);
+    background: var(--sc-white);
+    color: var(--sc-text-secondary);
+    display: flex; align-items: center; justify-content: center;
+    &:hover { background: var(--sc-bg-alt); color: var(--sc-primary); }
+  }
+}
+
+.search-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 12px;
+  margin-bottom: 22px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+
+  .field {
+    position: relative;
+
+    .field-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--sc-secondary);
+      pointer-events: none;
+    }
+    .sc-input { padding-left: 42px; }
+  }
+
+  .search-submit {
+    padding: 14px 28px;
+  }
+}
+
+.suggestions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  .group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+
+    .label {
+      color: var(--sc-text-muted);
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-right: 4px;
+    }
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .chip {
+    border: 1px solid var(--sc-border);
+    background: var(--sc-bg-alt);
+    color: var(--sc-text-secondary);
+    padding: 6px 14px;
+    border-radius: var(--sc-radius-pill);
+    font-size: 0.83rem;
+    font-family: var(--sc-font-body);
+    cursor: pointer;
+    transition: all .2s ease;
+
+    &:hover {
+      background: var(--sc-secondary);
+      color: #fff;
+      border-color: var(--sc-secondary);
+    }
+  }
+}
