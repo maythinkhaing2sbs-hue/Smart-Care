@@ -439,77 +439,114 @@
   }
 }
 
-/* ---------- Care team ---------- */
-.care-panel {
-  .advisor {
-    display: flex;
-    gap: 14px;
-    align-items: center;
-    margin-bottom: 14px;
+/* ---------- Consultation History ---------- */
+.consult-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
 
-    img {
-      width: 56px; height: 56px;
-      border-radius: 12px;
-      object-fit: cover;
-      flex-shrink: 0;
-    }
+.consult-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--sc-border);
 
-    .adv-body { min-width: 0; }
-    h4 { margin: 0 0 2px; font-size: 0.95rem; color: var(--sc-primary); }
-    p { margin: 0 0 4px; font-size: 0.8rem; }
+  &:last-child { border-bottom: 0; }
 
-    .adv-rating {
-      font-size: 0.78rem;
-      color: var(--sc-text);
-      font-weight: 600;
-      display: inline-flex;
-      align-items: center;
-      gap: 3px;
-      lucide-icon { color: #fbbf24; }
-      .muted { font-weight: 400; margin-left: 4px; }
-    }
+  .consult-icon {
+    width: 34px; height: 34px;
+    border-radius: 9px;
+    background: rgba(63, 114, 192, 0.08);
+    color: var(--sc-secondary);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
   }
 
-  .adv-next {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 14px;
-    background: var(--sc-bg);
-    border-radius: var(--sc-radius);
-    margin-bottom: 12px;
-
-    .adv-next-lbl { font-size: 0.7rem; color: var(--sc-text-muted); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; }
-    .adv-next-val { font-family: var(--sc-font-heading); font-weight: 700; color: var(--sc-primary); font-size: 0.88rem; }
+  .consult-body {
+    flex: 1;
+    min-width: 0;
   }
 
-  .adv-actions {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 6px;
+  .consult-name {
+    font-family: var(--sc-font-heading);
+    font-weight: 600;
+    font-size: 0.86rem;
+    color: var(--sc-primary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 
-    .ghost {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-      padding: 8px;
-      border: 1px solid var(--sc-border);
-      background: var(--sc-white);
-      border-radius: var(--sc-radius-sm);
-      font-family: var(--sc-font-heading);
-      font-weight: 500;
-      font-size: 0.76rem;
-      color: var(--sc-text-secondary);
-      cursor: pointer;
-      transition: all .2s ease;
+  .consult-meta {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.74rem;
+    color: var(--sc-text-muted);
+    margin-top: 2px;
+    lucide-icon { color: var(--sc-text-muted); }
+  }
 
-      &:hover {
-        background: var(--sc-bg);
-        color: var(--sc-primary);
-        border-color: var(--sc-secondary);
-      }
-    }
+  .consult-open {
+    width: 28px; height: 28px;
+    border-radius: 7px;
+    border: 1px solid var(--sc-border);
+    background: var(--sc-white);
+    color: var(--sc-text-muted);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    text-decoration: none;
+    transition: all .2s ease;
+
+    &:hover { background: var(--sc-secondary); color: #fff; border-color: var(--sc-secondary); }
+  }
+}
+
+/* ---------- Hospital stats tiles ---------- */
+.hosp-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.hs-tile {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 10px;
+  background: var(--sc-bg);
+  border: 1px solid var(--sc-border);
+  border-radius: var(--sc-radius-sm);
+
+  .hs-icon {
+    width: 30px; height: 30px;
+    border-radius: 7px;
+    background: rgba(63, 114, 192, 0.10);
+    color: var(--sc-secondary);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .hs-body { min-width: 0; line-height: 1.1; }
+
+  .hs-value {
+    font-family: var(--sc-font-heading);
+    font-weight: 800;
+    font-size: 0.95rem;
+    color: var(--sc-primary);
+  }
+
+  .hs-label {
+    font-family: var(--sc-font-heading);
+    font-size: 0.62rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--sc-text-muted);
+    margin-top: 2px;
   }
 }
 

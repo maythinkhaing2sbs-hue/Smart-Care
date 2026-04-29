@@ -103,3 +103,28 @@ export interface ChatMessage {
   suggestions?: string[];
   showConsultButton?: boolean;
 }
+
+export interface AssistantHospitalSuggestion {
+  id: string;
+  name: string;
+  specialty: string;
+  image: string;
+  rating: number;
+  location: string;
+}
+
+export interface AiChatMessage {
+  id: string;
+  role: 'user' | 'assistant';
+  content: string;
+  timestamp: Date;
+  streaming?: boolean;
+  hospitalSuggestion?: AssistantHospitalSuggestion;
+}
+
+export interface ChatSession {
+  id: string;
+  title: string;
+  messages: AiChatMessage[];
+  updatedAt: Date;
+}

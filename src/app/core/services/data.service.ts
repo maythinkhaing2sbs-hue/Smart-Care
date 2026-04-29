@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { Hospital, Booking, ConsultationSession, TripPlan, MedicalDocument, Review } from '../models/hospital.model';
+import { Hospital, Booking, ConsultationSession, TripPlan, MedicalDocument, Review, ChatSession, AiChatMessage, AssistantHospitalSuggestion } from '../models/hospital.model';
 
 @Injectable({ providedIn: 'root' })
 export class DataService {
@@ -200,7 +200,7 @@ export class DataService {
     {
       id: 'c1',
       doctorName: 'Dr. Emily Carter',
-      doctorSpecialty: 'Medical Advisor',
+      doctorSpecialty: 'General Medicine',
       doctorAvatar: 'https://i.pravatar.cc/150?img=47',
       date: '2026-05-15',
       time: '11:00 AM',
@@ -250,6 +250,62 @@ export class DataService {
     { id: 'r1', user: 'Sarah Johnson', avatar: 'https://i.pravatar.cc/150?img=49', rating: 5, date: '2026-03-15', comment: 'Excellent care from arrival to discharge. The doctors were thorough and compassionate.' },
     { id: 'r2', user: 'Michael Chen', avatar: 'https://i.pravatar.cc/150?img=14', rating: 5, date: '2026-02-22', comment: 'World-class facility. Highly recommend for cancer treatment — the staff went above and beyond.' },
     { id: 'r3', user: 'Aisha Patel', avatar: 'https://i.pravatar.cc/150?img=45', rating: 4, date: '2026-02-10', comment: 'Great service, modern facilities. Wait times were a bit long but the experience was worth it.' }
+  ]);
+
+  readonly chatSessions = signal<ChatSession[]>([
+    {
+      id: 'sess-1',
+      title: 'Chest pain & shortness of breath',
+      messages: [
+        {
+          id: 'm1', role: 'user',
+          content: "I've been having chest pain and feel short of breath after walking up stairs.",
+          timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2)
+        },
+        {
+          id: 'm2', role: 'assistant',
+          content: 'Your symptoms suggest a possible cardiovascular concern. Common conditions include angina, arrhythmia, or hypertension. I would recommend an ECG and stress test with a cardiology specialist as the next step. Cleveland Clinic has a top-rated cardiac care unit you may want to explore.',
+          timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2 + 5000),
+          hospitalSuggestion: { id: 'h3', name: 'Cleveland Clinic', specialty: 'Cardiology', image: 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=400&q=80', rating: 4.7, location: 'Cleveland, USA' }
+        }
+      ],
+      updatedAt: new Date(Date.now() - 1000 * 60 * 60 * 2)
+    },
+    {
+      id: 'sess-2',
+      title: 'Persistent migraines almost daily',
+      messages: [
+        {
+          id: 'm3', role: 'user',
+          content: 'I have been getting migraines lately, almost every other day. Pain on the right side.',
+          timestamp: new Date(Date.now() - 1000 * 60 * 60 * 26)
+        },
+        {
+          id: 'm4', role: 'assistant',
+          content: 'Frequent neurological symptoms can stem from triggers like stress, sleep disorders or vascular issues. A neurology consultation including imaging would help narrow this down. Mayo Clinic has highly-regarded neurologists.',
+          timestamp: new Date(Date.now() - 1000 * 60 * 60 * 26 + 5000),
+          hospitalSuggestion: { id: 'h2', name: 'Mayo Clinic', specialty: 'Neurology', image: 'https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&w=400&q=80', rating: 4.9, location: 'Rochester, USA' }
+        }
+      ],
+      updatedAt: new Date(Date.now() - 1000 * 60 * 60 * 26)
+    },
+    {
+      id: 'sess-3',
+      title: 'Cost estimate for spine surgery',
+      messages: [
+        {
+          id: 'm5', role: 'user',
+          content: 'Roughly how much does spine surgery cost in India versus Turkey?',
+          timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5)
+        },
+        {
+          id: 'm6', role: 'assistant',
+          content: 'Costs vary by procedure and hospital, but India and Turkey both offer excellent value. Spinal fusion typically ranges $5,000–$10,000 in India and $7,000–$12,000 in Turkey, including a hospital stay. Quality is comparable to leading Western hospitals.',
+          timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5 + 3000)
+        }
+      ],
+      updatedAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5)
+    }
   ]);
 
   getHospital(id: string): Hospital | undefined {

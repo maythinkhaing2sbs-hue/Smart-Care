@@ -137,47 +137,74 @@
         </div>
       </div>
 
-      <!-- Care team -->
-      <div class="panel care-panel">
-        <header class="panel-head">
-          <h3>Your Medical Advisor</h3>
-        </header>
-        <div class="advisor">
-          <img [src]="careTeam.avatar" [alt]="careTeam.name">
-          <div class="adv-body">
-            <h4>{{ careTeam.name }}</h4>
-            <p class="muted">{{ careTeam.role }}</p>
-            <div class="adv-rating">
-              <lucide-icon [img]="icons.Star" size="12"></lucide-icon>
-              {{ careTeam.rating }} <span class="muted">({{ careTeam.reviews }} reviews)</span>
-            </div>
-          </div>
-        </div>
-        <div class="adv-next">
-          <div>
-            <div class="adv-next-lbl">Next session</div>
-            <div class="adv-next-val">{{ careTeam.nextSession }}</div>
-          </div>
-          <button class="btn btn-secondary btn-sm">Join</button>
-        </div>
-        <div class="adv-actions">
-          <button class="ghost"><lucide-icon [img]="icons.MessageCircle" size="14"></lucide-icon> Message</button>
-          <button class="ghost"><lucide-icon [img]="icons.Phone" size="14"></lucide-icon> Call</button>
-          <button class="ghost"><lucide-icon [img]="icons.Mail" size="14"></lucide-icon> Email</button>
-        </div>
-      </div>
-
-      <!-- Recommended -->
+      <!-- Consultation History -->
       <div class="panel">
         <header class="panel-head">
           <div>
-            <h3>Recommended for you</h3>
-            <p class="muted">Curated based on your profile</p>
+            <h3>Consultation History</h3>
+            <p class="muted">Your recent AI sessions.</p>
+          </div>
+          <a routerLink="/portal/consultation" class="more-link">
+            View all <lucide-icon [img]="icons.ArrowRight" size="14"></lucide-icon>
+          </a>
+        </header>
+        <ul class="consult-list">
+          @for (s of data.chatSessions().slice(0, 4); track s.id) {
+            <li class="consult-item">
+              <div class="consult-icon">
+                <lucide-icon [img]="icons.MessageCircle" size="15"></lucide-icon>
+              </div>
+              <div class="consult-body">
+                <div class="consult-name">{{ s.title }}</div>
+                <div class="consult-meta">
+                  <lucide-icon [img]="icons.Clock" size="11"></lucide-icon>
+                  {{ relativeTime(s.updatedAt) }}
+                </div>
+              </div>
+              <a routerLink="/portal/consultation" class="consult-open" aria-label="Open session">
+                <lucide-icon [img]="icons.ChevronRight" size="14"></lucide-icon>
+              </a>
+            </li>
+          }
+        </ul>
+      </div>
+
+      <!-- Overview Hospital -->
+      <div class="panel">
+        <header class="panel-head">
+          <div>
+            <h3>Overview Hospital</h3>
+            <p class="muted">Network across our verified partners.</p>
           </div>
           <a routerLink="/portal/hospitals" class="more-link">All <lucide-icon [img]="icons.ArrowRight" size="14"></lucide-icon></a>
         </header>
+
+        <div class="hosp-stats">
+          <div class="hs-tile">
+            <div class="hs-icon"><lucide-icon [img]="icons.Building2" size="16"></lucide-icon></div>
+            <div class="hs-body">
+              <div class="hs-value">{{ hospitalCount() }}+</div>
+              <div class="hs-label">Hospitals</div>
+            </div>
+          </div>
+          <div class="hs-tile">
+            <div class="hs-icon"><lucide-icon [img]="icons.Globe" size="16"></lucide-icon></div>
+            <div class="hs-body">
+              <div class="hs-value">{{ countryCount() }}</div>
+              <div class="hs-label">Countries</div>
+            </div>
+          </div>
+          <div class="hs-tile">
+            <div class="hs-icon"><lucide-icon [img]="icons.Award" size="16"></lucide-icon></div>
+            <div class="hs-body">
+              <div class="hs-value">{{ specialtyCount() }}+</div>
+              <div class="hs-label">Specialties</div>
+            </div>
+          </div>
+        </div>
+
         <ul class="rec-list">
-          @for (h of data.hospitals().slice(0, 3); track h.id) {
+          @for (h of data.hospitals().slice(0, 2); track h.id) {
             <li>
               <a [routerLink]="['/portal/hospitals', h.id]" class="rec-row">
                 <img [src]="h.image" [alt]="h.name">

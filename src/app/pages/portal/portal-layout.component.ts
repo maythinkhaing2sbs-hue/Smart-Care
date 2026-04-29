@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { LucideAngularModule, LayoutDashboard, CalendarCheck, Stethoscope, Building2, Plane, FileText, CreditCard, LogOut, Bell, Search, Menu, X, HeartPulse } from 'lucide-angular';
+import { LucideAngularModule, LayoutDashboard, CalendarCheck, Stethoscope, Building2, Plane, FileText, CreditCard, LogOut, Bell, Search, Menu, X, HeartPulse, ArrowLeft } from 'lucide-angular';
 
 import { AuthService } from '../../core/services/auth.service';
 
@@ -16,9 +16,10 @@ export class PortalLayoutComponent {
   auth = inject(AuthService);
   private router = inject(Router);
 
-  readonly icons = { LayoutDashboard, CalendarCheck, Stethoscope, Building2, Plane, FileText, CreditCard, LogOut, Bell, Search, Menu, X, HeartPulse };
+  readonly icons = { LayoutDashboard, CalendarCheck, Stethoscope, Building2, Plane, FileText, CreditCard, LogOut, Bell, Search, Menu, X, HeartPulse, ArrowLeft };
 
   sidebarOpen = signal(false);
+  sidebarCollapsed = signal(false);
   notifOpen = signal(false);
 
   notifications = [
@@ -37,7 +38,13 @@ export class PortalLayoutComponent {
     { label: 'Payments', icon: CreditCard, link: '/portal/payments' }
   ];
 
-  toggleSidebar() { this.sidebarOpen.update(v => !v); }
+  toggleSidebar() {
+    if (window.innerWidth <= 992) {
+      this.sidebarOpen.update(v => !v);
+    } else {
+      this.sidebarCollapsed.update(v => !v);
+    }
+  }
   closeSidebar() { this.sidebarOpen.set(false); }
   toggleNotif() { this.notifOpen.update(v => !v); }
 
