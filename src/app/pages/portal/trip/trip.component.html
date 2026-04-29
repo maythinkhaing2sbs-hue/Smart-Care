@@ -15,10 +15,8 @@
   <!-- ============================================== -->
   @if (tripSaved()) {
     <section class="reminder-card" [attr.data-urgency]="urgency()">
-      <!-- Watermark airplane -->
-      <div class="rc-watermark">
-        <lucide-icon [img]="icons.Plane" size="240"></lucide-icon>
-      </div>
+      <!-- Watermark airplane (photo background) -->
+      <div class="rc-watermark"></div>
 
       <div class="rc-grid">
         <!-- LEFT — route -->
