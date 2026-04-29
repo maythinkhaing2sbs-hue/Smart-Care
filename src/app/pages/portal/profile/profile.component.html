@@ -1,0 +1,128 @@
+<div class="page">
+  <header class="page-head">
+    <div>
+      <h2>Profile</h2>
+      <p class="muted">Manage your personal details, medical info and preferences.</p>
+    </div>
+    @if (saved()) {
+      <span class="saved-toast badge badge-success sc-fade-in">✓ Profile updated</span>
+    }
+  </header>
+
+  <div class="profile-grid">
+    <!-- Left: Avatar & summary -->
+    <div class="sc-card sum-card">
+      <div class="avatar-wrap">
+        <img [src]="auth.user()?.avatar" [alt]="auth.user()?.name">
+        <button class="cam-btn" aria-label="Change photo"><lucide-icon [img]="icons.Camera" size="14"></lucide-icon></button>
+      </div>
+      <h3>{{ auth.user()?.name }}</h3>
+      <p class="role">Patient · Member since 2026</p>
+
+      <div class="sum-stats">
+        <div><div class="num">2</div><div class="lbl">Consultations</div></div>
+        <div><div class="num">3</div><div class="lbl">Bookings</div></div>
+        <div><div class="num">5</div><div class="lbl">Documents</div></div>
+      </div>
+
+      <div class="quick-info">
+        <div><lucide-icon [img]="icons.Mail" size="14"></lucide-icon> {{ email() }}</div>
+        <div><lucide-icon [img]="icons.Phone" size="14"></lucide-icon> {{ phone() || 'Add phone' }}</div>
+        <div><lucide-icon [img]="icons.MapPin" size="14"></lucide-icon> {{ country() }}</div>
+      </div>
+    </div>
+
+    <!-- Right: form -->
+    <div class="forms">
+      <div class="sc-card form-card">
+        <h3><lucide-icon [img]="icons.User" size="18"></lucide-icon> Personal Information</h3>
+        <div class="grid-2">
+          <div class="sc-form-group">
+            <label class="sc-label">Full Name</label>
+            <input class="sc-input" type="text" [ngModel]="name()" (ngModelChange)="name.set($event)">
+          </div>
+          <div class="sc-form-group">
+            <label class="sc-label">Email Address</label>
+            <input class="sc-input" type="email" [ngModel]="email()" (ngModelChange)="email.set($event)">
+          </div>
+          <div class="sc-form-group">
+            <label class="sc-label">Phone Number</label>
+            <input class="sc-input" type="tel" [ngModel]="phone()" (ngModelChange)="phone.set($event)">
+          </div>
+          <div class="sc-form-group">
+            <label class="sc-label">Date of Birth</label>
+            <input class="sc-input" type="date" [ngModel]="dob()" (ngModelChange)="dob.set($event)">
+          </div>
+          <div class="sc-form-group">
+            <label class="sc-label">Gender</label>
+            <select class="sc-select" [ngModel]="gender()" (ngModelChange)="gender.set($event)">
+              <option>Female</option><option>Male</option><option>Other</option>
+            </select>
+          </div>
+          <div class="sc-form-group">
+            <label class="sc-label">Country</label>
+            <input class="sc-input" type="text" [ngModel]="country()" (ngModelChange)="country.set($event)">
+          </div>
+          <div class="sc-form-group span-2">
+            <label class="sc-label">Address</label>
+            <input class="sc-input" type="text" [ngModel]="address()" (ngModelChange)="address.set($event)">
+          </div>
+        </div>
+      </div>
+
+      <div class="sc-card form-card">
+        <h3><lucide-icon [img]="icons.Shield" size="18"></lucide-icon> Medical Information</h3>
+        <div class="grid-2">
+          <div class="sc-form-group">
+            <label class="sc-label">Blood Group</label>
+            <select class="sc-select" [ngModel]="bloodGroup()" (ngModelChange)="bloodGroup.set($event)">
+              <option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option>
+            </select>
+          </div>
+          <div class="sc-form-group">
+            <label class="sc-label">Allergies</label>
+            <input class="sc-input" type="text" [ngModel]="allergies()" (ngModelChange)="allergies.set($event)">
+          </div>
+          <div class="sc-form-group span-2">
+            <label class="sc-label">Existing Conditions</label>
+            <input class="sc-input" type="text" [ngModel]="conditions()" (ngModelChange)="conditions.set($event)">
+          </div>
+        </div>
+      </div>
+
+      <div class="sc-card form-card">
+        <h3><lucide-icon [img]="icons.Bell" size="18"></lucide-icon> Notification Preferences</h3>
+        <div class="pref-list">
+          <label class="pref">
+            <div>
+              <div class="pn">Email notifications</div>
+              <div class="pd">Booking updates and reminders to your inbox</div>
+            </div>
+            <input type="checkbox" [checked]="notifEmail()" (change)="notifEmail.set(!notifEmail())">
+          </label>
+          <label class="pref">
+            <div>
+              <div class="pn">SMS notifications</div>
+              <div class="pd">Critical updates via SMS</div>
+            </div>
+            <input type="checkbox" [checked]="notifSms()" (change)="notifSms.set(!notifSms())">
+          </label>
+          <label class="pref">
+            <div>
+              <div class="pn">Push notifications</div>
+              <div class="pd">Real-time updates in the app</div>
+            </div>
+            <input type="checkbox" [checked]="notifPush()" (change)="notifPush.set(!notifPush())">
+          </label>
+        </div>
+      </div>
+
+      <div class="action-row">
+        <button class="btn btn-outline">Cancel</button>
+        <button class="btn btn-primary" (click)="saveProfile()">
+          <lucide-icon [img]="icons.Save" size="16"></lucide-icon> Save Changes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,57 @@
+<div class="page">
+  <header class="page-head">
+    <div>
+      <h2>Payments</h2>
+      <p class="muted">All Smart Care platform services are currently <strong>FREE</strong>.</p>
+    </div>
+  </header>
+
+  <!-- Free banner -->
+  <div class="free-banner sc-card">
+    <div class="fb-icon">
+      <lucide-icon [img]="icons.Sparkles" size="32"></lucide-icon>
+    </div>
+    <div class="fb-text">
+      <h3>You're on the FREE plan 🎉</h3>
+      <p>All consultations, hospital bookings, and trip planning services are free for our early users. Hospital treatment costs are paid directly to the hospital.</p>
+    </div>
+    <span class="badge badge-success">Active</span>
+  </div>
+
+  <!-- Two col -->
+  <div class="grid">
+    <div class="sc-card pm-card">
+      <h3><lucide-icon [img]="icons.CreditCard" size="18"></lucide-icon> Payment Methods</h3>
+      <p class="sub">Add a payment method for future transactions and hospital bills.</p>
+      <div class="empty-pm">
+        <lucide-icon [img]="icons.CreditCard" size="40"></lucide-icon>
+        <p>No payment method added yet.</p>
+        <button class="btn btn-outline btn-sm">Add Card</button>
+      </div>
+
+      <div class="security">
+        <lucide-icon [img]="icons.ShieldCheck" size="16"></lucide-icon>
+        <span>Bank-grade encryption · PCI-DSS compliant</span>
+      </div>
+    </div>
+
+    <div class="sc-card hist-card">
+      <h3><lucide-icon [img]="icons.Receipt" size="18"></lucide-icon> Payment History</h3>
+      <div class="hist-list">
+        @for (h of history; track h.id) {
+          <div class="hist-item">
+            <div class="hi-icon"><lucide-icon [img]="icons.CheckCircle2" size="16"></lucide-icon></div>
+            <div class="hi-body">
+              <div class="hi-desc">{{ h.desc }}</div>
+              <div class="hi-date">{{ h.date }}</div>
+            </div>
+            <div class="hi-amount">
+              <span class="amt">{{ h.amount }}</span>
+              <span class="badge badge-success">{{ h.status }}</span>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>

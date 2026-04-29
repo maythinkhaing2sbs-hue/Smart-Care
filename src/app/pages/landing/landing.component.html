@@ -1,0 +1,271 @@
+<app-navbar />
+<app-search-overlay />
+<app-chatbot />
+
+<main class="landing">
+  <!-- HERO  (full-width editorial banner) -->
+  <section id="home" class="hero">
+    <div class="hero-banner sc-fade-in">
+      <!-- Full-bleed background image + light gradient overlay -->
+      <div class="hero-bg"></div>
+      <div class="hero-overlay"></div>
+
+      <div class="sc-container hero-inner">
+        <!-- Top row: trust pill (left) + avatars + rating (right) -->
+        <div class="hero-top-row">
+          <span class="trust-pill">
+            <span class="tp-dot"></span>
+            <lucide-icon [img]="icons.HeartPulse" size="13"></lucide-icon>
+            Trusted by 50,000+ patients
+          </span>
+
+          <div class="rating-pill">
+            <div class="avatars">
+              <img src="https://i.pravatar.cc/40?img=11" alt="Patient">
+              <img src="https://i.pravatar.cc/40?img=47" alt="Patient">
+              <img src="https://i.pravatar.cc/40?img=15" alt="Patient">
+              <img src="https://i.pravatar.cc/40?img=33" alt="Patient">
+            </div>
+            <div class="rating-text">
+              <div class="stars">
+                @for (s of [1,2,3,4,5]; track s) {
+                  <lucide-icon [img]="icons.Star" size="11"></lucide-icon>
+                }
+              </div>
+              <span>4.9/5 · 12.4k reviews</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Middle: headline + subtitle + CTAs -->
+        <div class="hero-content">
+          <h1>
+            Compassionate care,<br>
+            <span class="grad">exceptional results.</span>
+          </h1>
+          <p class="lead">
+            Smart Care simplifies medical tourism — from AI-driven consultation to
+            finding world-class hospitals, booking appointments, and planning your trip.
+          </p>
+          <div class="hero-actions">
+            <button class="btn btn-primary btn-lg" (click)="ui.toggleSearch()">
+              <lucide-icon [img]="icons.Search" size="18"></lucide-icon>
+              Find a Hospital
+              <lucide-icon class="ba-arrow" [img]="icons.ArrowRight" size="16"></lucide-icon>
+            </button>
+            <button class="btn btn-outline btn-lg" (click)="ui.openChat()">
+              <lucide-icon [img]="icons.MessageCircle" size="18"></lucide-icon>
+              Try AI Consultation
+            </button>
+          </div>
+        </div>
+
+        <!-- Bottom: play button + inline stats -->
+        <div class="hero-bottom-row">
+          <button class="play-btn" aria-label="Watch our story">
+            <span class="play-circle">
+              <lucide-icon [img]="icons.Play" size="13"></lucide-icon>
+            </span>
+            <span class="play-text">
+              <span class="pt-lbl">Watch our story</span>
+              <span class="pt-sub">2 min · How it works</span>
+            </span>
+          </button>
+
+          <div class="hero-stats-inline">
+            @for (s of stats; track s.label) {
+              <div class="stat-inline">
+                <span class="num">{{ s.value }}</span>
+                <span class="lbl">{{ s.label }}</span>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="section about">
+    <div class="sc-container about-grid">
+      <div class="about-visual">
+        <img src="https://images.unsplash.com/photo-1666214280557-f1b5022eb634?auto=format&fit=crop&w=800&q=80" alt="Doctor consultation">
+        <div class="about-stat">
+          <div class="num">15+</div>
+          <div class="lbl">Years of expertise</div>
+        </div>
+      </div>
+      <div class="about-content">
+        <span class="eyebrow">About Smart Care</span>
+        <h2>One platform for every step of your medical journey</h2>
+        <p>
+          Smart Care connects patients with the world's most reputable hospitals and specialists.
+          We combine AI-driven consultation, transparent hospital data and end-to-end trip
+          coordination — so you can focus on healing, not logistics.
+        </p>
+
+        <div class="feature-list">
+          @for (f of features; track f.title) {
+            <div class="feature-item">
+              <div class="ficon"><lucide-icon [img]="f.icon" size="20"></lucide-icon></div>
+              <div>
+                <h4>{{ f.title }}</h4>
+                <p>{{ f.desc }}</p>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services" class="section services">
+    <div class="sc-container">
+      <div class="section-title">
+        <span class="eyebrow">Our Services</span>
+        <h2>Everything you need, end-to-end</h2>
+        <p>From the first symptom search to safely returning home — we handle the journey, you focus on care.</p>
+      </div>
+
+      <div class="services-grid">
+        @for (s of services; track s.title; let i = $index) {
+          <div class="service-card sc-card sc-card-hover" [style.--accent]="s.color">
+            <div class="s-icon"><lucide-icon [img]="s.icon" size="24"></lucide-icon></div>
+            <h3>{{ s.title }}</h3>
+            <p>{{ s.desc }}</p>
+            <a class="more">Learn more <lucide-icon [img]="icons.ArrowRight" size="14"></lucide-icon></a>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="how" class="section how">
+    <div class="sc-container">
+      <div class="section-title">
+        <span class="eyebrow">How it works</span>
+        <h2>From symptoms to recovery in 4 simple steps</h2>
+      </div>
+
+      <div class="steps-grid">
+        @for (step of steps; track step.n) {
+          <div class="step">
+            <div class="step-num">{{ step.n }}</div>
+            <h4>{{ step.title }}</h4>
+            <p>{{ step.desc }}</p>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURED HOSPITALS -->
+  <section id="hospitals" class="section hospitals">
+    <div class="sc-container">
+      <div class="section-title">
+        <span class="eyebrow">Featured Hospitals</span>
+        <h2>World-class care, vetted for you</h2>
+        <p>A selection of our top-rated partner hospitals from around the world.</p>
+      </div>
+
+      <div class="hospitals-grid">
+        @for (h of data.hospitals().slice(0, 6); track h.id) {
+          <div class="hospital-card sc-card sc-card-hover">
+            <div class="hc-img" [style.background-image]="'url(' + h.image + ')'">
+              <span class="hc-rating">
+                <lucide-icon [img]="icons.Star" size="13"></lucide-icon>
+                {{ h.rating }}
+              </span>
+            </div>
+            <div class="hc-body">
+              <h4>{{ h.name }}</h4>
+              <div class="hc-loc">
+                <lucide-icon [img]="icons.MapPin" size="14"></lucide-icon>
+                {{ h.location }}
+              </div>
+              <span class="badge badge-primary">{{ h.specialty }}</span>
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="cta-row">
+        <button class="btn btn-primary btn-lg" (click)="ui.toggleSearch()">
+          Explore All Hospitals
+          <lucide-icon [img]="icons.ArrowRight" size="18"></lucide-icon>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- BIG CTA -->
+  <section class="cta-band">
+    <div class="sc-container">
+      <div class="cta-inner">
+        <div>
+          <h2>Ready to begin your healing journey?</h2>
+          <p>Talk to our AI advisor or browse hospitals — your medical team is just a click away.</p>
+        </div>
+        <div class="cta-actions">
+          <button class="btn btn-secondary btn-lg" (click)="ui.openChat()">
+            <lucide-icon [img]="icons.MessageCircle" size="18"></lucide-icon>
+            Start Consultation
+          </button>
+          <button class="btn btn-outline btn-lg cta-outline" (click)="ui.openAuth('register')">
+            Register Now
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="sc-container">
+      <div class="footer-grid">
+        <div>
+          <div class="brand-mini">
+            <div class="bm-icon"><lucide-icon [img]="icons.HeartPulse" size="20"></lucide-icon></div>
+            <div>
+              <div class="bm-name">Smart Care</div>
+              <div class="bm-tag">Medical Travel Simplified</div>
+            </div>
+          </div>
+          <p class="foot-text">A trusted platform for global medical travel — connecting patients with world-class hospitals.</p>
+        </div>
+        <div>
+          <h5>Platform</h5>
+          <ul>
+            <li><a href="#about">About</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#hospitals">Hospitals</a></li>
+            <li><a href="#how">How it Works</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5>Support</h5>
+          <ul>
+            <li><a href="#">Help Center</a></li>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5>Get the latest updates</h5>
+          <p class="foot-text">Insights, hospital spotlights and patient stories — straight to your inbox.</p>
+          <form class="foot-form" (submit)="$event.preventDefault()">
+            <input type="email" placeholder="you@example.com">
+            <button type="submit" class="btn btn-primary">Subscribe</button>
+          </form>
+        </div>
+      </div>
+      <div class="foot-bottom">
+        <span>© 2026 Smart Care. All rights reserved.</span>
+        <span>Designed for a healthier global community.</span>
+      </div>
+    </div>
+  </footer>
+</main>

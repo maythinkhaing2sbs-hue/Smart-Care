@@ -1,0 +1,340 @@
+@if (hospital(); as h) {
+<div class="page">
+  <a routerLink="/portal/hospitals" class="back-link">
+    <lucide-icon [img]="icons.ArrowLeft" size="16"></lucide-icon> Back to Hospitals
+  </a>
+
+  <!-- ============================================== -->
+  <!-- HERO SECTION (modernized)                      -->
+  <!-- ============================================== -->
+  <div class="hero-card">
+    <div class="hero-img" [style.background-image]="'url(' + h.image + ')'">
+      <span class="hero-accred">
+        <lucide-icon [img]="icons.ShieldCheck" size="12"></lucide-icon>
+        {{ h.accreditation }}
+      </span>
+    </div>
+
+    <div class="hero-body">
+      <div class="hero-top">
+        <div class="hero-left">
+          <div class="hero-loc-row">
+            <lucide-icon [img]="icons.MapPin" size="13"></lucide-icon>
+            <span>{{ h.location }}</span>
+            <span class="hero-dot">·</span>
+            <span>Est. {{ h.established }}</span>
+          </div>
+          <h1>{{ h.name }}</h1>
+          <div class="hero-specs">
+            @for (s of h.specialties; track s) {
+              <span class="badge badge-info">{{ s }}</span>
+            }
+          </div>
+        </div>
+
+        <div class="hero-right">
+          <div class="hero-rating">
+            <div class="hr-row">
+              <lucide-icon [img]="icons.Star" size="16"></lucide-icon>
+              <span class="hr-num">{{ h.rating }}</span>
+            </div>
+            <span class="hr-sub">{{ h.reviewsCount.toLocaleString() }} reviews</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick action bar -->
+      <div class="hero-actions">
+        <a class="ha-btn primary" [href]="'tel:' + h.phone">
+          <lucide-icon [img]="icons.Phone" size="14"></lucide-icon> Call
+        </a>
+        <a class="ha-btn" [href]="'mailto:' + h.email">
+          <lucide-icon [img]="icons.Mail" size="14"></lucide-icon> Email
+        </a>
+        <button class="ha-btn">
+          <lucide-icon [img]="icons.Navigation" size="14"></lucide-icon> Directions
+        </button>
+        <button class="ha-btn">
+          <lucide-icon [img]="icons.Share2" size="14"></lucide-icon> Share
+        </button>
+      </div>
+
+      <!-- Stats strip -->
+      <div class="hero-stats">
+        <div class="hs-item">
+          <span class="hs-lbl">Established</span>
+          <span class="hs-val">{{ h.established }}</span>
+        </div>
+        <div class="hs-divider"></div>
+        <div class="hs-item">
+          <span class="hs-lbl">Beds</span>
+          <span class="hs-val">{{ h.bedCount }}</span>
+        </div>
+        <div class="hs-divider"></div>
+        <div class="hs-item">
+          <span class="hs-lbl">Specialists</span>
+          <span class="hs-val">{{ h.doctors.length }}+</span>
+        </div>
+        <div class="hs-divider"></div>
+        <div class="hs-item">
+          <span class="hs-lbl">Specialties</span>
+          <span class="hs-val">{{ h.specialties.length }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tab-strip">
+    @for (t of tabs; track t) {
+      <button [class.active]="tab() === t" (click)="setTab(t)">{{ t }}</button>
+    }
+  </div>
+
+  <div class="content-grid">
+    <!-- LEFT: tab content -->
+    <div class="left">
+      @switch (tab()) {
+        @case ('Overview') {
+          <div class="overview-stack sc-fade-in">
+
+            <!-- Contact info -->
+            <div class="sc-card section-card">
+              <h3>
+                <lucide-icon [img]="icons.Phone" size="16"></lucide-icon>
+                Contact Information
+              </h3>
+
+              <div class="contact-grid">
+                <a class="contact-row" [href]="'tel:' + h.phone">
+                  <div class="cr-icon"><lucide-icon [img]="icons.Phone" size="16"></lucide-icon></div>
+                  <div class="cr-body">
+                    <span class="cr-lbl">Phone</span>
+                    <span class="cr-val">{{ h.phone }}</span>
+                  </div>
+                </a>
+
+                <a class="contact-row" [href]="'mailto:' + h.email">
+                  <div class="cr-icon"><lucide-icon [img]="icons.Mail" size="16"></lucide-icon></div>
+                  <div class="cr-body">
+                    <span class="cr-lbl">Email</span>
+                    <span class="cr-val">{{ h.email }}</span>
+                  </div>
+                </a>
+
+                @if (h.website) {
+                  <a class="contact-row" [href]="'https://' + h.website" target="_blank" rel="noopener">
+                    <div class="cr-icon"><lucide-icon [img]="icons.Globe" size="16"></lucide-icon></div>
+                    <div class="cr-body">
+                      <span class="cr-lbl">Website</span>
+                      <span class="cr-val">{{ h.website }}</span>
+                    </div>
+                  </a>
+                }
+
+                <div class="contact-row span-2">
+                  <div class="cr-icon"><lucide-icon [img]="icons.MapPin" size="16"></lucide-icon></div>
+                  <div class="cr-body">
+                    <span class="cr-lbl">Address</span>
+                    <span class="cr-val">{{ h.address }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- About hospital -->
+            <div class="sc-card section-card">
+              <h3>
+                <lucide-icon [img]="icons.Building" size="16"></lucide-icon>
+                About Hospital
+              </h3>
+              <p class="about-text">{{ h.about }}</p>
+            </div>
+
+            <!-- Facilities -->
+            <div class="sc-card section-card">
+              <h3>
+                <lucide-icon [img]="icons.ShieldCheck" size="16"></lucide-icon>
+                Facilities
+              </h3>
+              <div class="facility-grid">
+                @for (f of h.facilities; track f) {
+                  <div class="facility">
+                    <div class="fic"><lucide-icon [img]="getFacilityIcon(f)" size="16"></lucide-icon></div>
+                    <span>{{ f }}</span>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+        }
+        @case ('Reviews') {
+          <div class="sc-card section-card sc-fade-in">
+            <div class="rev-head">
+              <h3>Patient Reviews</h3>
+              <div class="rev-overall">
+                <lucide-icon [img]="icons.Star" size="18"></lucide-icon>
+                <span class="num">{{ h.rating }}</span>
+                <span class="of">/5 · {{ h.reviewsCount }} reviews</span>
+              </div>
+            </div>
+
+            @if (showReviewForm()) {
+              <div class="review-form sc-fade-in">
+                <div class="rf-head">
+                  <h4>Share your experience</h4>
+                  <button class="close" (click)="closeReviewForm()" aria-label="Close">
+                    <lucide-icon [img]="icons.X" size="16"></lucide-icon>
+                  </button>
+                </div>
+
+                <div class="rf-rating">
+                  <label class="sc-label">Your rating</label>
+                  <div class="stars-input" (mouseleave)="setHover(0)">
+                    @for (n of [1,2,3,4,5]; track n) {
+                      <button type="button"
+                              class="star-btn"
+                              [class.active]="(reviewHover() || reviewRating()) >= n"
+                              (mouseenter)="setHover(n)"
+                              (click)="setRating(n)"
+                              [attr.aria-label]="n + ' star'">
+                        <lucide-icon [img]="icons.Star" size="22"></lucide-icon>
+                      </button>
+                    }
+                    @if (reviewRating() > 0) {
+                      <span class="rating-text">{{ reviewRating() }}/5</span>
+                    }
+                  </div>
+                </div>
+
+                <div class="sc-form-group">
+                  <label class="sc-label">Your review</label>
+                  <textarea class="sc-textarea"
+                            rows="4"
+                            placeholder="Tell other patients about the care you received, the facilities, and the staff..."
+                            [ngModel]="reviewComment()"
+                            (ngModelChange)="reviewComment.set($event)"></textarea>
+                </div>
+
+                @if (reviewError()) {
+                  <div class="rf-error">{{ reviewError() }}</div>
+                }
+
+                <div class="rf-actions">
+                  <button class="btn btn-outline" (click)="closeReviewForm()">Cancel</button>
+                  <button class="btn btn-primary" (click)="submitReview()">
+                    <lucide-icon [img]="icons.Send" size="14"></lucide-icon> Submit Review
+                  </button>
+                </div>
+              </div>
+            }
+
+            <div class="reviews-list">
+              @for (r of data.reviews(); track r.id) {
+                <div class="review">
+                  <img [src]="r.avatar" [alt]="r.user">
+                  <div>
+                    <div class="r-top">
+                      <h5>{{ r.user }}</h5>
+                      <div class="r-stars">
+                        @for (s of [1,2,3,4,5]; track s) {
+                          <lucide-icon [img]="icons.Star" size="12" [style.opacity]="s <= r.rating ? 1 : 0.25"></lucide-icon>
+                        }
+                      </div>
+                    </div>
+                    <div class="r-date">{{ r.date }}</div>
+                    <p>{{ r.comment }}</p>
+                  </div>
+                </div>
+              }
+            </div>
+
+            @if (!showReviewForm()) {
+              <button class="btn btn-outline btn-block" (click)="openReviewForm()">
+                Write a Review
+              </button>
+            }
+          </div>
+        }
+        @case ('Gallery') {
+          <div class="sc-card section-card sc-fade-in">
+            <h3>Hospital Gallery</h3>
+            <div class="gallery">
+              <div class="g-item" [style.background-image]="'url(' + h.image + ')'"></div>
+              <div class="g-item" style="background-image: url('https://images.unsplash.com/photo-1631815588090-d4bfec5b1ccb?auto=format&fit=crop&w=600&q=80')"></div>
+              <div class="g-item" style="background-image: url('https://images.unsplash.com/photo-1666214280557-f1b5022eb634?auto=format&fit=crop&w=600&q=80')"></div>
+              <div class="g-item" style="background-image: url('https://images.unsplash.com/photo-1551076805-e1869033e561?auto=format&fit=crop&w=600&q=80')"></div>
+            </div>
+          </div>
+        }
+      }
+    </div>
+
+    <!-- RIGHT: appointment booking (date only) -->
+    <div class="right">
+      <div class="sc-card booking-card">
+        <h3><lucide-icon [img]="icons.CalendarCheck" size="18"></lucide-icon> Book Appointment</h3>
+        <p class="bk-sub">Select a date and we'll confirm your visit.</p>
+
+        <div class="cal-head">
+          <span class="month">{{ monthName }}</span>
+          <div class="cal-nav">
+            <button aria-label="Previous"><lucide-icon [img]="icons.ChevronLeft" size="16"></lucide-icon></button>
+            <button aria-label="Next"><lucide-icon [img]="icons.ChevronRight" size="16"></lucide-icon></button>
+          </div>
+        </div>
+
+        <div class="calendar">
+          @for (w of weekHeaders; track w) { <div class="cal-h">{{ w }}</div> }
+          @for (i of [].constructor(calendarOffset); track $index) { <div class="cal-d empty"></div> }
+          @for (d of daysInMonth; track d) {
+            <button class="cal-d" [class.active]="isDayActive(d)" (click)="pickDay(d)">{{ d }}</button>
+          }
+        </div>
+
+        @if (selectedDate()) {
+          <div class="selected-date">
+            <lucide-icon [img]="icons.CalendarCheck" size="14"></lucide-icon>
+            Selected: <strong>{{ selectedDate() }}</strong>
+          </div>
+        }
+
+        <button class="btn btn-primary btn-block btn-lg book-btn"
+                [disabled]="!selectedDate()"
+                (click)="bookAppointment()">
+          <lucide-icon [img]="icons.CalendarCheck" size="16"></lucide-icon>
+          Book Appointment
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+} @else {
+  <div class="not-found sc-card">
+    <h3>Hospital not found</h3>
+    <a routerLink="/portal/hospitals" class="btn btn-primary">Back to list</a>
+  </div>
+}
+
+<!-- Success Modal -->
+@if (showSuccess() && successBooking()) {
+<div class="success-overlay" (click)="closeSuccess()">
+  <div class="success-modal sc-scale-in" (click)="$event.stopPropagation()">
+    <div class="check-circle">
+      <lucide-icon [img]="icons.CheckCircle2" size="40"></lucide-icon>
+    </div>
+    <h3>Your Booking is Confirmed!</h3>
+    <p>You will soon receive the confirmation details on your email.</p>
+
+    <div class="success-details">
+      <div class="row"><span>Hospital</span><strong>{{ successBooking()!.hospitalName }}</strong></div>
+      <div class="row"><span>Date</span><strong>{{ successBooking()!.date }}</strong></div>
+      <div class="row"><span>Booking ID</span><strong>{{ successBooking()!.bookingNumber }}</strong></div>
+    </div>
+
+    <div class="success-actions">
+      <button class="btn btn-primary btn-block" (click)="viewBookings()">View Booking</button>
+    </div>
+  </div>
+</div>
+}

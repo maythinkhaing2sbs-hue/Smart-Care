@@ -1,0 +1,105 @@
+:host { display: block; }
+
+.page { display: flex; flex-direction: column; gap: 18px; }
+
+.page-head h2 { margin-bottom: 4px; color: var(--sc-primary); font-size: 1.5rem; }
+.page-head .muted { color: var(--sc-text-muted); margin: 0; font-size: 0.92rem; }
+
+.channels {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+
+  @media (max-width: 768px) { grid-template-columns: 1fr; }
+}
+
+.ch-card {
+  text-align: center;
+  padding: 22px 18px;
+
+  .ch-icon {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 12px;
+  }
+  h4 { color: var(--sc-primary); margin-bottom: 4px; font-size: 1rem; }
+  p { font-size: 0.85rem; margin-bottom: 12px; color: var(--sc-text-secondary); }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 18px;
+
+  @media (max-width: 992px) { grid-template-columns: 1fr; }
+}
+
+.faq-card, .form-card {
+  padding: 22px;
+
+  h3 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--sc-primary);
+    font-size: 1.05rem;
+    margin: 0 0 6px;
+  }
+  .sub { font-size: 0.82rem; color: var(--sc-text-muted); margin-bottom: 14px; }
+}
+
+.faq-list { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
+
+.faq {
+  border: 1px solid var(--sc-border);
+  border-radius: var(--sc-radius);
+  overflow: hidden;
+  transition: all .2s ease;
+
+  &.open { border-color: var(--sc-secondary); }
+
+  .q-btn {
+    width: 100%;
+    text-align: left;
+    padding: 14px 16px;
+    background: var(--sc-white);
+    border: 0;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--sc-font-heading);
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--sc-primary);
+    transition: background .2s ease;
+
+    &:hover { background: var(--sc-bg); }
+
+    lucide-icon {
+      transition: transform .25s ease;
+      color: var(--sc-text-muted);
+      flex-shrink: 0;
+    }
+  }
+
+  &.open .q-btn lucide-icon { transform: rotate(180deg); color: var(--sc-secondary); }
+
+  .answer {
+    padding: 0 16px 14px;
+    font-size: 0.86rem;
+    color: var(--sc-text-secondary);
+    line-height: 1.6;
+  }
+}
+
+.sent-msg {
+  padding: 12px 14px;
+  background: var(--sc-success-bg);
+  color: var(--sc-success);
+  border-radius: var(--sc-radius);
+  font-size: 0.88rem;
+  margin-bottom: 14px;
+}

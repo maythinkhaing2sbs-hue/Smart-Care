@@ -1,0 +1,226 @@
+<div class="dashboard">
+  <!-- Workspace header -->
+  <header class="ws-header sc-fade-in">
+    <div class="ws-greeting">
+      <span class="ws-eyebrow">{{ 'Today, ' + (1745798400000 | date:'EEEE, MMM d, y') }}</span>
+      <h2>Welcome back, {{ auth.user()?.name }}</h2>
+      <p class="ws-sub">Here's the latest on your medical journey.</p>
+    </div>
+    <div class="ws-actions">
+      <button class="btn btn-outline" routerLink="/portal/hospitals">
+        <lucide-icon [img]="icons.Building2" size="16"></lucide-icon>
+        Browse Hospitals
+      </button>
+      <button class="btn btn-primary" routerLink="/portal/consultation">
+        <lucide-icon [img]="icons.Sparkles" size="16"></lucide-icon>
+        New Consultation
+      </button>
+    </div>
+  </header>
+
+  <!-- KPI strip -->
+  <section class="kpi-strip">
+    @for (k of kpis; track k.label) {
+      <div class="kpi-tile">
+        <div class="kpi-top">
+          <div class="kpi-icon">
+            <lucide-icon [img]="k.icon" size="18"></lucide-icon>
+          </div>
+          <span class="kpi-delta" [class.up]="k.positive" [class.down]="!k.positive">
+            <lucide-icon [img]="k.positive ? icons.TrendingUp : icons.TrendingDown" size="11"></lucide-icon>
+            {{ k.delta }}
+          </span>
+        </div>
+        <div class="kpi-value">{{ k.value }}</div>
+        <div class="kpi-label">{{ k.label }}</div>
+        <div class="kpi-hint">{{ k.hint }}</div>
+      </div>
+    }
+  </section>
+
+  <!-- Main grid -->
+  <section class="main-grid">
+    <!-- LEFT COLUMN -->
+    <div class="left-col">
+      <!-- Upcoming appointments table -->
+      <div class="panel">
+        <header class="panel-head">
+          <div>
+            <h3>Upcoming Appointments</h3>
+            <p class="muted">Your next scheduled hospital visits.</p>
+          </div>
+          <a routerLink="/portal/bookings" class="more-link">
+            View all <lucide-icon [img]="icons.ArrowRight" size="14"></lucide-icon>
+          </a>
+        </header>
+
+        <div class="data-table">
+          <div class="dt-head">
+            <div>Hospital / Doctor</div>
+            <div>Date & Time</div>
+            <div>Status</div>
+            <div></div>
+          </div>
+          @for (b of data.bookings(); track b.id) {
+            <div class="dt-row">
+              <div class="dt-hospital">
+                <img [src]="b.hospitalImage" [alt]="b.hospitalName">
+                <div>
+                  <div class="dt-name">{{ b.hospitalName }}</div>
+                  <div class="dt-doc">{{ b.doctorName }} · {{ b.doctorSpecialty }}</div>
+                </div>
+              </div>
+              <div class="dt-date">
+                <div>{{ b.date }}</div>
+                <div class="muted">{{ b.time }}</div>
+              </div>
+              <div>
+                <span class="badge"
+                      [class.badge-success]="b.status === 'Confirmed'"
+                      [class.badge-warning]="b.status === 'Pending'"
+                      [class.badge-danger]="b.status === 'Cancelled'">
+                  {{ b.status }}
+                </span>
+              </div>
+              <div class="dt-actions">
+                <button class="link-btn" routerLink="/portal/bookings">
+                  Details <lucide-icon [img]="icons.ChevronRight" size="13"></lucide-icon>
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Activity feed -->
+      <div class="panel">
+        <header class="panel-head">
+          <div>
+            <h3>Recent Activity</h3>
+            <p class="muted">A live feed of updates on your account.</p>
+          </div>
+          <a class="more-link">View all <lucide-icon [img]="icons.ArrowRight" size="14"></lucide-icon></a>
+        </header>
+
+        <ul class="activity-list">
+          @for (a of activities; track a.id) {
+            <li class="activity">
+              <div class="act-icon" [style.background]="a.color + '14'" [style.color]="a.color">
+                <lucide-icon [img]="a.icon" size="15"></lucide-icon>
+              </div>
+              <div class="act-body">
+                <div class="act-title">{{ a.title }}</div>
+                <div class="act-time">{{ a.time }}</div>
+              </div>
+              <button class="link-btn">View</button>
+            </li>
+          }
+        </ul>
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div class="right-col">
+      <!-- Quick actions -->
+      <div class="panel">
+        <header class="panel-head">
+          <h3>Quick Actions</h3>
+        </header>
+        <div class="qa-grid">
+          @for (q of quickActions; track q.label) {
+            <a [routerLink]="q.link" class="qa-tile" [attr.data-accent]="q.accent">
+              <lucide-icon [img]="q.icon" size="18"></lucide-icon>
+              <span>{{ q.label }}</span>
+              <lucide-icon class="arrow" [img]="icons.ArrowUpRight" size="14"></lucide-icon>
+            </a>
+          }
+        </div>
+      </div>
+
+      <!-- Consultation History -->
+      <div class="panel">
+        <header class="panel-head">
+          <div>
+            <h3>Consultation History</h3>
+            <p class="muted">Your recent AI sessions.</p>
+          </div>
+          <a routerLink="/portal/consultation" class="more-link">
+            View all <lucide-icon [img]="icons.ArrowRight" size="14"></lucide-icon>
+          </a>
+        </header>
+        <ul class="consult-list">
+          @for (s of data.chatSessions().slice(0, 4); track s.id) {
+            <li class="consult-item">
+              <div class="consult-icon">
+                <lucide-icon [img]="icons.MessageCircle" size="15"></lucide-icon>
+              </div>
+              <div class="consult-body">
+                <div class="consult-name">{{ s.title }}</div>
+                <div class="consult-meta">
+                  <lucide-icon [img]="icons.Clock" size="11"></lucide-icon>
+                  {{ relativeTime(s.updatedAt) }}
+                </div>
+              </div>
+              <a routerLink="/portal/consultation" class="consult-open" aria-label="Open session">
+                <lucide-icon [img]="icons.ChevronRight" size="14"></lucide-icon>
+              </a>
+            </li>
+          }
+        </ul>
+      </div>
+
+      <!-- Overview Hospital -->
+      <div class="panel">
+        <header class="panel-head">
+          <div>
+            <h3>Overview Hospital</h3>
+            <p class="muted">Network across our verified partners.</p>
+          </div>
+          <a routerLink="/portal/hospitals" class="more-link">All <lucide-icon [img]="icons.ArrowRight" size="14"></lucide-icon></a>
+        </header>
+
+        <div class="hosp-stats">
+          <div class="hs-tile">
+            <div class="hs-icon"><lucide-icon [img]="icons.Building2" size="16"></lucide-icon></div>
+            <div class="hs-body">
+              <div class="hs-value">{{ hospitalCount() }}+</div>
+              <div class="hs-label">Hospitals</div>
+            </div>
+          </div>
+          <div class="hs-tile">
+            <div class="hs-icon"><lucide-icon [img]="icons.Globe" size="16"></lucide-icon></div>
+            <div class="hs-body">
+              <div class="hs-value">{{ countryCount() }}</div>
+              <div class="hs-label">Countries</div>
+            </div>
+          </div>
+          <div class="hs-tile">
+            <div class="hs-icon"><lucide-icon [img]="icons.Award" size="16"></lucide-icon></div>
+            <div class="hs-body">
+              <div class="hs-value">{{ specialtyCount() }}+</div>
+              <div class="hs-label">Specialties</div>
+            </div>
+          </div>
+        </div>
+
+        <ul class="rec-list">
+          @for (h of data.hospitals().slice(0, 2); track h.id) {
+            <li>
+              <a [routerLink]="['/portal/hospitals', h.id]" class="rec-row">
+                <img [src]="h.image" [alt]="h.name">
+                <div class="rec-body">
+                  <div class="rec-name">{{ h.name }}</div>
+                  <div class="rec-meta">
+                    <span><lucide-icon [img]="icons.MapPin" size="11"></lucide-icon> {{ h.location }}</span>
+                    <span class="rate"><lucide-icon [img]="icons.Star" size="11"></lucide-icon> {{ h.rating }}</span>
+                  </div>
+                </div>
+                <lucide-icon class="rec-arrow" [img]="icons.ChevronRight" size="14"></lucide-icon>
+              </a>
+            </li>
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+</div>

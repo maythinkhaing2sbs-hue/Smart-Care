@@ -1,0 +1,181 @@
+<div class="page">
+  <!-- HEADER -->
+  <header class="page-head">
+    <h2>Hospital Search</h2>
+    <p class="muted">Browse our network of verified, accredited hospitals worldwide.</p>
+  </header>
+
+  <!-- FILTER BAR — Specialty 30% / Country 30% / Search 40% -->
+  <div class="filter-bar">
+    <!-- Specialty -->
+    <div class="filter-item" [class.open]="specialtyOpen()">
+      <button class="fi-trigger" type="button" (click)="toggleSpecialty()">
+        <div class="fi-icon"><lucide-icon [img]="icons.Award" size="18"></lucide-icon></div>
+        <div class="fi-body">
+          <span class="fi-lbl">Specialty</span>
+          <span class="fi-val">{{ selectedSpecialty() }}</span>
+        </div>
+        <lucide-icon class="fi-chevron" [img]="icons.ChevronDown" size="16"></lucide-icon>
+      </button>
+
+      @if (specialtyOpen()) {
+        <div class="fi-dropdown sc-fade-in-down">
+          @for (s of specialties(); track s) {
+            <button class="fid-option"
+                    type="button"
+                    [class.selected]="selectedSpecialty() === s"
+                    (click)="setSpecialty(s)">
+              <span class="fid-text">{{ s }}</span>
+              @if (selectedSpecialty() === s) {
+                <lucide-icon [img]="icons.Check" size="14"></lucide-icon>
+              }
+            </button>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Country -->
+    <div class="filter-item" [class.open]="countryOpen()">
+      <button class="fi-trigger" type="button" (click)="toggleCountry()">
+        <div class="fi-icon"><lucide-icon [img]="icons.Globe" size="18"></lucide-icon></div>
+        <div class="fi-body">
+          <span class="fi-lbl">Country</span>
+          <span class="fi-val">{{ selectedCountry() }}</span>
+        </div>
+        <lucide-icon class="fi-chevron" [img]="icons.ChevronDown" size="16"></lucide-icon>
+      </button>
+
+      @if (countryOpen()) {
+        <div class="fi-dropdown sc-fade-in-down">
+          @for (c of countries; track c) {
+            <button class="fid-option"
+                    type="button"
+                    [class.selected]="selectedCountry() === c"
+                    (click)="setCountry(c)">
+              <span class="fid-text">{{ c }}</span>
+              @if (selectedCountry() === c) {
+                <lucide-icon [img]="icons.Check" size="14"></lucide-icon>
+              }
+            </button>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Search -->
+    <div class="filter-item">
+      <div class="fi-trigger as-input">
+        <div class="fi-icon"><lucide-icon [img]="icons.Search" size="18"></lucide-icon></div>
+        <div class="fi-body">
+          <span class="fi-lbl">Search</span>
+          <input type="text"
+                 placeholder="Hospitals, treatments, doctors..."
+                 [ngModel]="searchQ()"
+                 (ngModelChange)="searchQ.set($event)">
+        </div>
+        @if (searchQ()) {
+          <button class="fi-clear" type="button" (click)="clearSearch()" aria-label="Clear search">
+            <lucide-icon [img]="icons.X" size="13"></lucide-icon>
+          </button>
+        }
+      </div>
+    </div>
+
+    <!-- Backdrop to close dropdowns when clicking outside -->
+    @if (specialtyOpen() || countryOpen()) {
+      <div class="dd-backdrop" (click)="closeDropdowns()"></div>
+    }
+  </div>
+
+  <!-- META ROW (count + active filters + clear) -->
+  <div class="meta-bar">
+    <div class="meta-left">
+      <span class="result-count">
+        <strong>{{ filtered().length }}</strong> hospital{{ filtered().length === 1 ? '' : 's' }} found
+      </span>
+      @if (hasActiveFilters()) {
+        <div class="active-chips">
+          @if (searchQ()) {
+            <button class="chip" (click)="clearSearch()">
+              <lucide-icon [img]="icons.Search" size="11"></lucide-icon>
+              {{ searchQ() }}
+              <lucide-icon [img]="icons.X" size="11"></lucide-icon>
+            </button>
+          }
+          @if (selectedCountry() !== 'All') {
+            <button class="chip" (click)="setCountry('All')">
+              <lucide-icon [img]="icons.Globe" size="11"></lucide-icon>
+              {{ selectedCountry() }}
+              <lucide-icon [img]="icons.X" size="11"></lucide-icon>
+            </button>
+          }
+          @if (selectedSpecialty() !== 'All') {
+            <button class="chip" (click)="setSpecialty('All')">
+              <lucide-icon [img]="icons.Award" size="11"></lucide-icon>
+              {{ selectedSpecialty() }}
+              <lucide-icon [img]="icons.X" size="11"></lucide-icon>
+            </button>
+          }
+        </div>
+      }
+    </div>
+    @if (hasActiveFilters()) {
+      <button class="clear-all" (click)="clearFilters()">Clear all filters</button>
+    }
+  </div>
+
+  <!-- HOSPITAL GRID -->
+  @if (filtered().length === 0) {
+    <div class="empty">
+      <div class="empty-icon"><lucide-icon [img]="icons.Building2" size="32"></lucide-icon></div>
+      <h4>No hospitals match your filters</h4>
+      <p>Try adjusting your search or filters to see more results.</p>
+      <button class="btn btn-outline btn-sm" (click)="clearFilters()">Clear filters</button>
+    </div>
+  }
+
+  <div class="hospitals-grid">
+    @for (h of filtered(); track h.id) {
+      <a class="h-card" [routerLink]="['/portal/hospitals', h.id]">
+        <div class="hc-img" [style.background-image]="'url(' + h.image + ')'">
+          <span class="hc-badge">
+            <lucide-icon [img]="icons.ShieldCheck" size="11"></lucide-icon>
+            Verified
+          </span>
+          <span class="hc-rating">
+            <lucide-icon [img]="icons.Star" size="12"></lucide-icon>
+            {{ h.rating }}
+          </span>
+        </div>
+        <div class="hc-body">
+          <div class="hc-top">
+            <h4>{{ h.name }}</h4>
+            <div class="hc-loc">
+              <lucide-icon [img]="icons.MapPin" size="12"></lucide-icon> {{ h.location }}
+            </div>
+          </div>
+
+          <div class="hc-specs">
+            @for (s of h.specialties.slice(0, 2); track s) {
+              <span class="hc-spec">{{ s }}</span>
+            }
+            @if (h.specialties.length > 2) {
+              <span class="hc-spec more">+{{ h.specialties.length - 2 }}</span>
+            }
+          </div>
+
+          <div class="hc-foot">
+            <span class="hc-reviews">
+              {{ h.reviewsCount.toLocaleString() }} reviews
+            </span>
+            <span class="hc-arrow">
+              View
+              <lucide-icon [img]="icons.ArrowRight" size="13"></lucide-icon>
+            </span>
+          </div>
+        </div>
+      </a>
+    }
+  </div>
+</div>

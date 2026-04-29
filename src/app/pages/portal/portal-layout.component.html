@@ -1,0 +1,94 @@
+<div class="portal-shell" [class.collapsed]="sidebarCollapsed()">
+  <!-- SIDEBAR -->
+  <aside class="sidebar" [class.open]="sidebarOpen()">
+    <div class="brand">
+      <div class="brand-icon"><lucide-icon [img]="icons.HeartPulse" size="20"></lucide-icon></div>
+      <div class="brand-text">
+        <div class="bn">Smart Care</div>
+        <div class="bt">Patient Portal</div>
+      </div>
+    </div>
+
+    <nav class="side-nav">
+      @for (item of navItems; track item.label) {
+        <a [routerLink]="item.link"
+           routerLinkActive="active"
+           (click)="closeSidebar()"
+           class="nav-item">
+          <lucide-icon [img]="item.icon" size="18"></lucide-icon>
+          <span>{{ item.label }}</span>
+          @if (item.badge) { <span class="bdg">{{ item.badge }}</span> }
+        </a>
+      }
+    </nav>
+
+    <div class="sidebar-cta">
+      <button class="logout-btn" (click)="logout()">
+        <lucide-icon [img]="icons.LogOut" size="16"></lucide-icon>
+        Sign Out
+      </button>
+    </div>
+  </aside>
+
+  @if (sidebarOpen()) {
+    <div class="sidebar-backdrop hide-desktop" (click)="closeSidebar()"></div>
+  }
+
+  <!-- MAIN AREA -->
+  <div class="main-area">
+    <!-- Topbar -->
+    <header class="topbar">
+      <button class="icon-btn sidebar-toggle" (click)="toggleSidebar()" aria-label="Toggle sidebar">
+        <lucide-icon [img]="icons.Menu" size="20"></lucide-icon>
+      </button>
+
+      <div class="topbar-search hide-mobile">
+        <lucide-icon [img]="icons.Search" size="18"></lucide-icon>
+        <input type="text" placeholder="Search hospitals, doctors, bookings...">
+      </div>
+
+      <div class="topbar-actions">
+        <a class="icon-btn" routerLink="/" aria-label="Back to website" title="Back to website">
+          <lucide-icon [img]="icons.ArrowLeft" size="20"></lucide-icon>
+        </a>
+
+        <div class="notif-wrap">
+          <button class="icon-btn notif-btn" (click)="toggleNotif()" aria-label="Notifications">
+            <lucide-icon [img]="icons.Bell" size="20"></lucide-icon>
+            <span class="notif-dot">2</span>
+          </button>
+          @if (notifOpen()) {
+            <div class="notif-panel sc-fade-in-down">
+              <div class="np-head">
+                <h4>Notifications</h4>
+                <a class="mark-all">Mark all read</a>
+              </div>
+              <div class="np-list">
+                @for (n of notifications; track n.id) {
+                  <div class="np-item" [class.unread]="n.unread">
+                    <div class="np-title">{{ n.title }}</div>
+                    <div class="np-text">{{ n.text }}</div>
+                    <div class="np-time">{{ n.time }}</div>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+
+        <button class="user-pill" routerLink="/portal/profile" aria-label="Open profile">
+          <img [src]="auth.user()?.avatar" [alt]="auth.user()?.name">
+          <div class="up-text hide-mobile">
+            <div class="up-name">{{ auth.user()?.name }}</div>
+            <div class="up-role">View profile</div>
+          </div>
+        </button>
+      </div>
+    </header>
+
+    <!-- Content -->
+    <main class="content sc-fade-in">
+      <router-outlet />
+    </main>
+  </div>
+</div>
