@@ -4,14 +4,30 @@
   position: fixed;
   top: 0; left: 0; right: 0;
   height: var(--sc-nav-h);
-  background: rgba(255,255,255,0.85);
-  backdrop-filter: blur(14px);
+  background: transparent;
+  backdrop-filter: none;
   border-bottom: 1px solid transparent;
   z-index: 100;
-  transition: all .25s ease;
+  transition: background .25s ease, backdrop-filter .25s ease, border-color .25s ease, box-shadow .25s ease;
+
+  /* Top (transparent) state: make inner controls glass-style so the
+     whole bar reads as transparent, not just the strip behind them. */
+  &:not(.scrolled) {
+    .icon-btn,
+    .user-cluster .user-btn {
+      background: rgba(255, 255, 255, 0.18);
+      border-color: rgba(255, 255, 255, 0.45);
+      backdrop-filter: blur(8px);
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.28);
+      }
+    }
+  }
 
   &.scrolled {
     background: rgba(255,255,255,0.96);
+    backdrop-filter: blur(14px);
     border-bottom-color: var(--sc-border);
     box-shadow: var(--sc-shadow-sm);
   }
