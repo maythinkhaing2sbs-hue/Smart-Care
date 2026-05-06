@@ -145,18 +145,32 @@
   <section id="how" class="section how">
     <div class="sc-container">
       <div class="section-title">
-        <span class="eyebrow">How it works</span>
-        <h2>From symptoms to recovery in 4 simple steps</h2>
+        <span class="eyebrow">Our Care Process</span>
+        <h2>Trusted Path to Outstanding Medical Care</h2>
+        <p>Every healing journey follows a thoughtful process. Our specific approach matches every step with what you need to recover.</p>
       </div>
 
-      <div class="steps-grid">
-        @for (step of steps; track step.n) {
-          <div class="step">
-            <div class="step-num">{{ step.n }}</div>
-            <h4>{{ step.title }}</h4>
-            <p>{{ step.desc }}</p>
+      <div class="how-card">
+        <div class="how-card-image">
+          <img src="https://images.unsplash.com/photo-1666214280557-f1b5022eb634?auto=format&fit=crop&w=900&q=80" alt="Patient consulting with doctor" />
+        </div>
+
+        <div class="how-card-body">
+          <ul class="how-steps">
+            @for (step of steps; track step.n) {
+              <li class="how-step">
+                <div class="hs-num">{{ step.n }}</div>
+                <div class="hs-title">{{ step.title }}</div>
+                <div class="hs-desc">{{ step.desc }}</div>
+              </li>
+            }
+          </ul>
+
+          <div class="how-cta">
+            <p class="how-cta-text">Begin your healing journey right now.</p>
+            <button class="btn how-cta-btn" (click)="ui.openAuth('register')">LET'S COLLABORATE</button>
           </div>
-        }
+        </div>
       </div>
     </div>
   </section>
