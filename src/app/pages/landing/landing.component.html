@@ -121,22 +121,50 @@
   </section>
 
   <!-- SERVICES -->
-  <section id="services" class="section services">
+  <section id="services" class="services-section">
+    <div class="services-grid-bg" aria-hidden="true"></div>
+
     <div class="sc-container">
-      <div class="section-title">
-        <span class="eyebrow">Our Services</span>
-        <h2>Everything you need, end-to-end</h2>
-        <p>From the first symptom search to safely returning home — we handle the journey, you focus on care.</p>
+      <div class="services-head">
+        <div class="services-head-left">
+          <span class="services-eyebrow">
+            <lucide-icon [img]="icons.Sparkles" size="13"></lucide-icon>
+            Our Services
+          </span>
+          <h2 class="services-h2">
+            Everything you need,<br>
+            <span class="accent">end-to-end.</span>
+          </h2>
+        </div>
+        <div class="services-head-right">
+          <p>Smart Care brings clarity, not complexity — uniting consultation, hospital discovery, booking and travel into one calm, end-to-end journey.</p>
+          <button type="button" class="services-cta" (click)="ui.openChat()">
+            Explore More
+          </button>
+        </div>
       </div>
 
-      <div class="services-grid">
+      <div class="services-cards" (mouseleave)="resetActiveService()">
         @for (s of services; track s.title; let i = $index) {
-          <div class="service-card sc-card sc-card-hover" [style.--accent]="s.color">
-            <div class="s-icon"><lucide-icon [img]="s.icon" size="24"></lucide-icon></div>
-            <h3>{{ s.title }}</h3>
-            <p>{{ s.desc }}</p>
-            <a class="more">Learn more <lucide-icon [img]="icons.ArrowRight" size="14"></lucide-icon></a>
-          </div>
+          <article class="svc-card"
+                   [class.is-active]="activeService === i"
+                   [style.--i]="i"
+                   tabindex="0"
+                   (mouseenter)="setActiveService(i)"
+                   (focus)="setActiveService(i)">
+            <div class="svc-img" aria-hidden="true">
+              <img [src]="s.image" [alt]="s.title" loading="lazy">
+              <span class="svc-img-shade"></span>
+            </div>
+            <div class="svc-body">
+              <span class="svc-num">0{{ i + 1 }}.</span>
+              <div class="svc-icon">
+                <lucide-icon [img]="s.icon" size="18"></lucide-icon>
+              </div>
+              <h3 class="svc-title">{{ s.title }}</h3>
+              <p class="svc-desc">{{ s.desc }}</p>
+            </div>
+          </article>
         }
       </div>
     </div>

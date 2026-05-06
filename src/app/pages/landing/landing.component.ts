@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LucideAngularModule, Stethoscope, Building2, CalendarCheck, Plane, Star, ArrowRight, ShieldCheck, HeartPulse, MessageSquare, Globe, Search, MessageCircle, Award, Users, MapPin, Play } from 'lucide-angular';
+import { LucideAngularModule, Stethoscope, Building2, CalendarCheck, Plane, Star, ArrowRight, ShieldCheck, HeartPulse, MessageSquare, Globe, Search, MessageCircle, Award, Users, MapPin, Play, Sparkles } from 'lucide-angular';
 
 import { NavbarComponent } from '../../shared/navbar/navbar.component';
 import { SearchOverlayComponent } from '../../shared/search-overlay/search-overlay.component';
@@ -22,15 +22,25 @@ export class LandingComponent {
   readonly icons = {
     Stethoscope, Building2, CalendarCheck, Plane, Star, ArrowRight,
     ShieldCheck, HeartPulse, MessageSquare, Globe, Search, MessageCircle,
-    Award, Users, MapPin, Play
+    Award, Users, MapPin, Play, Sparkles
   };
 
+  /** Index of the currently expanded services card (defaults to Medical Consultation). */
+  activeService = 0;
+  setActiveService(i: number) { this.activeService = i; }
+  resetActiveService() { this.activeService = 0; }
+
   services = [
-    { icon: Stethoscope, title: 'Medical Consultation', desc: 'Expert advisor assignment and structured online/offline consultation sessions.', color: '#143566' },
-    { icon: Building2, title: 'Hospital Discovery', desc: 'Comprehensive hospital listings with ratings and comparison tools for informed decisions.', color: '#3F72C0' },
-    { icon: CalendarCheck, title: 'Appointment Booking', desc: 'Easy booking requests with real-time confirmation and tracking.', color: '#143566' },
-    { icon: Plane, title: 'Travel Coordination', desc: 'End-to-end trip planning. Reliable pickup and drop-off arrangements for patients and companions.', color: '#3F72C0' },
-    { icon: MessageSquare, title: 'Feedback & Recommendations', desc: 'Patient reviews and data-driven insights to improve care quality and experience.', color: '#143566' }
+    { icon: Stethoscope, title: 'Medical Consultation', desc: 'Expert advisor assignment and structured online/offline consultation sessions.', color: '#143566',
+      image: 'https://images.unsplash.com/photo-1666214280557-f1b5022eb634?auto=format&fit=crop&w=900&q=80' },
+    { icon: Building2, title: 'Hospital Discovery', desc: 'Comprehensive hospital listings with ratings and comparison tools for informed decisions.', color: '#3F72C0',
+      image: 'https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&w=900&q=80' },
+    { icon: CalendarCheck, title: 'Appointment Booking', desc: 'Easy booking requests with real-time confirmation and tracking.', color: '#143566',
+      image: 'https://images.unsplash.com/photo-1612277795421-9bc7706a4a34?auto=format&fit=crop&w=900&q=80' },
+    { icon: Plane, title: 'Travel Coordination', desc: 'End-to-end trip planning. Reliable pickup and drop-off arrangements for patients and companions.', color: '#3F72C0',
+      image: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=900&q=80' },
+    { icon: MessageSquare, title: 'Feedback & Recommendations', desc: 'Patient reviews and data-driven insights to improve care quality and experience.', color: '#143566',
+      image: 'https://images.unsplash.com/photo-1504439468489-c8920d796a29?auto=format&fit=crop&w=900&q=80' }
   ];
 
   steps = [
