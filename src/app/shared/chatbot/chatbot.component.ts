@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, inject, signal, AfterViewChecked } from '@angular/core';
+import { Component, ElementRef, ViewChild, inject, signal, AfterViewChecked, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -15,7 +15,7 @@ import { ChatMessage } from '../../core/models/hospital.model';
   templateUrl: './chatbot.component.html',
   styleUrl: './chatbot.component.scss'
 })
-export class ChatbotComponent implements AfterViewChecked {
+export class ChatbotComponent implements AfterViewChecked, OnInit {
   ui = inject(UiService);
   private auth = inject(AuthService);
   private router = inject(Router);
@@ -27,6 +27,9 @@ export class ChatbotComponent implements AfterViewChecked {
   input = signal('');
   isTyping = signal(false);
   shouldScroll = false;
+
+  tooltipShown = signal(false);
+  tooltipDismissed = signal(false);
 
   messages = signal<ChatMessage[]>([
     {
@@ -43,6 +46,18 @@ export class ChatbotComponent implements AfterViewChecked {
       this.msgScroll.nativeElement.scrollTop = this.msgScroll.nativeElement.scrollHeight;
       this.shouldScroll = false;
     }
+  }
+
+  ngOnInit() {
+    setTimeout(() => {
+      if (!this.tooltipDismissed()) this.tooltipShown.set(true);
+    }, 2200);
+  }
+
+  dismissTooltip(ev: Event) {
+    ev.stopPropagation();
+    this.tooltipDismissed.set(true);
+    this.tooltipShown.set(false);
   }
 
   pickSuggestion(s: string) {

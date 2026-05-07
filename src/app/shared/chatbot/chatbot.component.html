@@ -1,8 +1,40 @@
-<!-- Floating launcher -->
-<button class="chat-fab" [class.hidden]="ui.chatOpen()" (click)="ui.toggleChat()" aria-label="Open AI Chat">
-  <lucide-icon [img]="icons.MessageCircle" size="24"></lucide-icon>
-  <span class="pulse"></span>
-</button>
+<!-- Floating launcher with attention-grabbing tooltip -->
+<div class="chat-fab-wrap" [class.hidden]="ui.chatOpen()">
+  <!-- Info tooltip — introduces the AI assistant -->
+  <div class="chat-tooltip" [class.dismissed]="tooltipDismissed()" [class.shown]="tooltipShown()">
+    <button class="tooltip-close" (click)="dismissTooltip($event)" aria-label="Dismiss">
+      <lucide-icon [img]="icons.X" size="12"></lucide-icon>
+    </button>
+    <div class="tooltip-head">
+      <div class="tooltip-avatar">
+        <lucide-icon [img]="icons.Sparkles" size="13"></lucide-icon>
+      </div>
+      <div>
+        <div class="tooltip-title">Smart Care AI</div>
+        <div class="tooltip-status"><span class="status-dot"></span>Online · replies instantly</div>
+      </div>
+    </div>
+    <p class="tooltip-body">
+      Have a health concern? Chat with our AI assistant — describe your symptoms and get instant specialist recommendations.
+    </p>
+    <button type="button" class="tooltip-cta" (click)="ui.toggleChat()">
+      Start a conversation
+      <lucide-icon [img]="icons.ArrowRight" size="13"></lucide-icon>
+    </button>
+    <span class="tooltip-tail" aria-hidden="true"></span>
+  </div>
+
+  <!-- The FAB -->
+  <button class="chat-fab" (click)="ui.toggleChat()" aria-label="Open AI Health Chat">
+    <span class="fab-ring fab-ring-1" aria-hidden="true"></span>
+    <span class="fab-ring fab-ring-2" aria-hidden="true"></span>
+    <span class="fab-ring fab-ring-3" aria-hidden="true"></span>
+    <span class="fab-badge" aria-hidden="true">
+      <lucide-icon [img]="icons.Sparkles" size="10"></lucide-icon>
+    </span>
+    <lucide-icon class="fab-icon" [img]="icons.MessageCircle" size="24"></lucide-icon>
+  </button>
+</div>
 
 <!-- Chat panel -->
 @if (ui.chatOpen()) {
