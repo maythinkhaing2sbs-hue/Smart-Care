@@ -274,6 +274,76 @@ input, textarea, select {
 .sc-scale-in { animation: scScaleIn .35s ease both; }
 .sc-slide-in-right { animation: scSlideInRight .4s ease both; }
 
+/* ---------- IntersectionObserver-driven reveals ----------
+   The RevealDirective adds `.is-visible` when an element enters the viewport.
+   Works in every browser; no animation-timeline dependency. */
+.sc-reveal,
+.sc-reveal-left,
+.sc-reveal-right,
+.sc-reveal-scale,
+.sc-reveal-blur {
+  opacity: 0;
+  transition:
+    opacity .85s cubic-bezier(.2, .8, .2, 1),
+    transform .85s cubic-bezier(.2, .8, .2, 1),
+    filter .85s ease;
+  will-change: transform, opacity;
+}
+
+.sc-reveal       { transform: translateY(28px); }
+.sc-reveal-left  { transform: translateX(-32px); }
+.sc-reveal-right { transform: translateX(32px); }
+.sc-reveal-scale { transform: scale(0.94); }
+.sc-reveal-blur  { transform: translateY(20px); filter: blur(8px); }
+
+.sc-reveal.is-visible,
+.sc-reveal-left.is-visible,
+.sc-reveal-right.is-visible,
+.sc-reveal-scale.is-visible,
+.sc-reveal-blur.is-visible {
+  opacity: 1;
+  transform: translate(0, 0) scale(1);
+  filter: blur(0);
+}
+
+/* Stagger: each direct child fades up in sequence once parent enters viewport */
+.sc-stagger > * {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity .7s cubic-bezier(.2, .8, .2, 1),
+    transform .7s cubic-bezier(.2, .8, .2, 1);
+  will-change: transform, opacity;
+}
+
+.sc-stagger.is-visible > * {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.sc-stagger.is-visible > *:nth-child(1) { transition-delay: 60ms; }
+.sc-stagger.is-visible > *:nth-child(2) { transition-delay: 150ms; }
+.sc-stagger.is-visible > *:nth-child(3) { transition-delay: 240ms; }
+.sc-stagger.is-visible > *:nth-child(4) { transition-delay: 330ms; }
+.sc-stagger.is-visible > *:nth-child(5) { transition-delay: 420ms; }
+.sc-stagger.is-visible > *:nth-child(6) { transition-delay: 510ms; }
+.sc-stagger.is-visible > *:nth-child(7) { transition-delay: 600ms; }
+.sc-stagger.is-visible > *:nth-child(8) { transition-delay: 690ms; }
+
+/* Honor reduced-motion for the entire reveal system */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .sc-fade-in, .sc-fade-in-down, .sc-scale-in, .sc-slide-in-right,
+  .sc-reveal, .sc-reveal-left, .sc-reveal-right, .sc-reveal-scale, .sc-reveal-blur,
+  .sc-stagger > * {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    transition: none !important;
+  }
+}
+
 /* ---------- Section helpers ---------- */
 .section {
   padding: 90px 0;

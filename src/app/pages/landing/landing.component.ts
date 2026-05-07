@@ -5,13 +5,15 @@ import { LucideAngularModule, Stethoscope, Building2, CalendarCheck, Plane, Star
 import { NavbarComponent } from '../../shared/navbar/navbar.component';
 import { SearchOverlayComponent } from '../../shared/search-overlay/search-overlay.component';
 import { ChatbotComponent } from '../../shared/chatbot/chatbot.component';
+import { RevealDirective } from '../../shared/directives/reveal.directive';
+import { CountUpDirective } from '../../shared/directives/count-up.directive';
 import { UiService } from '../../core/services/ui.service';
 import { DataService } from '../../core/services/data.service';
 
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule, NavbarComponent, SearchOverlayComponent, ChatbotComponent],
+  imports: [CommonModule, LucideAngularModule, NavbarComponent, SearchOverlayComponent, ChatbotComponent, RevealDirective, CountUpDirective],
   templateUrl: './landing.component.html',
   styleUrl: './landing.component.scss'
 })
