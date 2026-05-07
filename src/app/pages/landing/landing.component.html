@@ -59,6 +59,7 @@
             </button>
           </div>
         </div>
+        
 
         <!-- Bottom: play button + inline stats -->
         <div class="hero-bottom-row">
@@ -75,7 +76,7 @@
           <div class="hero-stats-inline">
             @for (s of stats; track s.label) {
               <div class="stat-inline">
-                <span class="num">{{ s.value }}</span>
+                <span class="num" [appCountUp]="s.value"></span>
                 <span class="lbl">{{ s.label }}</span>
               </div>
             }
@@ -88,14 +89,16 @@
   <!-- ABOUT -->
   <section id="about" class="section about">
     <div class="sc-container about-grid">
-      <div class="about-visual">
-        <img src="https://images.unsplash.com/photo-1666214280557-f1b5022eb634?auto=format&fit=crop&w=800&q=80" alt="Doctor consultation">
+      <div class="about-visual sc-reveal-left">
+        <div class="about-img-wrap">
+          <img src="/Image/care.jpg" alt="Doctor consultation">
+        </div>
         <div class="about-stat">
-          <div class="num">15+</div>
+          <div class="num" appCountUp="15+"></div>
           <div class="lbl">Years of expertise</div>
         </div>
       </div>
-      <div class="about-content">
+      <div class="about-content sc-reveal-right">
         <span class="eyebrow">About Smart Care</span>
         <h2>One platform for every step of your medical journey</h2>
         <p>
@@ -104,7 +107,7 @@
           coordination — so you can focus on healing, not logistics.
         </p>
 
-        <div class="feature-list">
+        <div class="feature-list sc-stagger">
           @for (f of features; track f.title) {
             <div class="feature-item">
               <div class="ficon"><lucide-icon [img]="f.icon" size="20"></lucide-icon></div>
@@ -120,22 +123,50 @@
   </section>
 
   <!-- SERVICES -->
-  <section id="services" class="section services">
+  <section id="services" class="services-section">
+    <div class="services-grid-bg" aria-hidden="true"></div>
+
     <div class="sc-container">
-      <div class="section-title">
-        <span class="eyebrow">Our Services</span>
-        <h2>Everything you need, end-to-end</h2>
-        <p>From the first symptom search to safely returning home — we handle the journey, you focus on care.</p>
+      <div class="services-head">
+        <div class="services-head-left sc-reveal-left">
+          <span class="services-eyebrow">
+            <lucide-icon [img]="icons.Sparkles" size="13"></lucide-icon>
+            Our Services
+          </span>
+          <h2 class="services-h2">
+            Everything you need,<br>
+            <span class="accent">end-to-end.</span>
+          </h2>
+        </div>
+        <div class="services-head-right sc-reveal-right">
+          <p>Smart Care brings clarity, not complexity — uniting consultation, hospital discovery, booking and travel into one calm, end-to-end journey.</p>
+          <button type="button" class="services-cta" (click)="ui.openChat()">
+            Explore More
+          </button>
+        </div>
       </div>
 
-      <div class="services-grid">
+      <div class="services-cards" (mouseleave)="resetActiveService()">
         @for (s of services; track s.title; let i = $index) {
-          <div class="service-card sc-card sc-card-hover" [style.--accent]="s.color">
-            <div class="s-icon"><lucide-icon [img]="s.icon" size="24"></lucide-icon></div>
-            <h3>{{ s.title }}</h3>
-            <p>{{ s.desc }}</p>
-            <a class="more">Learn more <lucide-icon [img]="icons.ArrowRight" size="14"></lucide-icon></a>
-          </div>
+          <article class="svc-card"
+                   [class.is-active]="activeService === i"
+                   [style.--i]="i"
+                   tabindex="0"
+                   (mouseenter)="setActiveService(i)"
+                   (focus)="setActiveService(i)">
+            <div class="svc-img" aria-hidden="true">
+              <img [src]="s.image" [alt]="s.title" loading="lazy">
+              <span class="svc-img-shade"></span>
+            </div>
+            <div class="svc-body">
+              <span class="svc-num">0{{ i + 1 }}.</span>
+              <div class="svc-icon">
+                <lucide-icon [img]="s.icon" size="18"></lucide-icon>
+              </div>
+              <h3 class="svc-title">{{ s.title }}</h3>
+              <p class="svc-desc">{{ s.desc }}</p>
+            </div>
+          </article>
         }
       </div>
     </div>
@@ -144,19 +175,37 @@
   <!-- HOW IT WORKS -->
   <section id="how" class="section how">
     <div class="sc-container">
-      <div class="section-title">
+      <div class="section-title sc-reveal">
         <span class="eyebrow">How it works</span>
         <h2>From symptoms to recovery in 4 simple steps</h2>
+        <p>Every healing journey follows a thoughtful process. Our specific approach matches every step with what you need to recover.</p>
       </div>
 
-      <div class="steps-grid">
-        @for (step of steps; track step.n) {
-          <div class="step">
-            <div class="step-num">{{ step.n }}</div>
-            <h4>{{ step.title }}</h4>
-            <p>{{ step.desc }}</p>
+      <div class="how-card sc-reveal-scale">
+        <div class="how-card-image">
+          <img src="/Image/howitwork.jpg" alt="How it works" />
+        </div>
+
+        <div class="how-card-body">
+          <ul class="how-steps sc-stagger">
+            @for (step of steps; track step.n) {
+              <li class="how-step">
+                <div class="hs-num" aria-label="Step {{ step.n }}">
+                  <span class="hs-num-dot" aria-hidden="true"></span>
+                  <span class="hs-num-label">Step</span>
+                  <span class="hs-num-value">{{ step.n }}</span>
+                </div>
+                <div class="hs-title">{{ step.title }}</div>
+                <div class="hs-desc">{{ step.desc }}</div>
+              </li>
+            }
+          </ul>
+
+          <div class="how-cta">
+            <p class="how-cta-text">Begin your healing journey right now.</p>
+            <button class="btn how-cta-btn" (click)="ui.openAuth('register')">LET'S COLLABORATE</button>
           </div>
-        }
+        </div>
       </div>
     </div>
   </section>
@@ -164,13 +213,13 @@
   <!-- FEATURED HOSPITALS -->
   <section id="hospitals" class="section hospitals">
     <div class="sc-container">
-      <div class="section-title">
+      <div class="section-title sc-reveal">
         <span class="eyebrow">Featured Hospitals</span>
         <h2>World-class care, vetted for you</h2>
         <p>A selection of our top-rated partner hospitals from around the world.</p>
       </div>
 
-      <div class="hospitals-grid">
+      <div class="hospitals-grid sc-stagger">
         @for (h of data.hospitals().slice(0, 6); track h.id) {
           <div class="hospital-card sc-card sc-card-hover">
             <div class="hc-img" [style.background-image]="'url(' + h.image + ')'">
@@ -191,7 +240,7 @@
         }
       </div>
 
-      <div class="cta-row">
+      <div class="cta-row sc-reveal">
         <button class="btn btn-primary btn-lg" (click)="ui.toggleSearch()">
           Explore All Hospitals
           <lucide-icon [img]="icons.ArrowRight" size="18"></lucide-icon>
@@ -200,20 +249,36 @@
     </div>
   </section>
 
-  <!-- BIG CTA -->
+  <!-- BIG CTA — full-bleed photo + floating glass card -->
   <section class="cta-band">
+    <div class="cta-bg" aria-hidden="true">
+      <img src="/Image/contactus.jpg" alt="" loading="lazy">
+    </div>
+    <div class="cta-tint" aria-hidden="true"></div>
+    <div class="cta-decor" aria-hidden="true">
+      <span class="cta-orb cta-orb-1"></span>
+      <span class="cta-orb cta-orb-2"></span>
+      <span class="cta-corner"></span>
+    </div>
+
     <div class="sc-container">
-      <div class="cta-inner">
-        <div>
-          <h2>Ready to begin your healing journey?</h2>
-          <p>Talk to our AI advisor or browse hospitals — your medical team is just a click away.</p>
-        </div>
+      <div class="cta-card sc-reveal-scale">
+        <span class="cta-eyebrow">
+          <lucide-icon [img]="icons.Sparkles" size="13"></lucide-icon>
+          Take the First Step
+        </span>
+        <h2>
+          Ready To Begin Your<br>
+          Healing <span class="cta-grad">Journey</span>
+        </h2>
+        <span class="cta-divider" aria-hidden="true"></span>
+        <p class="cta-desc">Talk to our AI advisor or browse hospitals — your medical team is just a click away.</p>
         <div class="cta-actions">
-          <button class="btn btn-secondary btn-lg" (click)="ui.openChat()">
-            <lucide-icon [img]="icons.MessageCircle" size="18"></lucide-icon>
-            Start Consultation
+          <button type="button" class="cta-btn-primary" (click)="ui.openChat()">
+            <span>Start Consultation</span>
+            <lucide-icon class="cta-btn-arrow" [img]="icons.ArrowRight" size="14"></lucide-icon>
           </button>
-          <button class="btn btn-outline btn-lg cta-outline" (click)="ui.openAuth('register')">
+          <button type="button" class="cta-btn-outline" (click)="ui.openAuth('register')">
             Register Now
           </button>
         </div>
@@ -224,7 +289,7 @@
   <!-- FOOTER -->
   <footer class="footer">
     <div class="sc-container">
-      <div class="footer-grid">
+      <div class="footer-grid sc-stagger">
         <div>
           <div class="brand-mini">
             <div class="bm-icon"><lucide-icon [img]="icons.HeartPulse" size="20"></lucide-icon></div>

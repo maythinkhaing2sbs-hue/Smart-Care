@@ -1,11 +1,174 @@
 :host { display: contents; }
 
-.chat-fab {
+/* ------------------------------------------------------------------ */
+/* Floating chat launcher                                              */
+/* ------------------------------------------------------------------ */
+.chat-fab-wrap {
   position: fixed;
   bottom: 28px;
   right: 28px;
-  width: 60px;
-  height: 60px;
+  z-index: 80;
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+
+  &.hidden { display: none; }
+
+  @media (max-width: 480px) {
+    bottom: 18px;
+    right: 18px;
+  }
+}
+
+/* ----- Tooltip / Info bubble ----- */
+.chat-tooltip {
+  position: relative;
+  width: 280px;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 14px 16px 14px 14px;
+  box-shadow:
+    0 24px 60px -16px rgba(20, 53, 102, 0.30),
+    0 6px 18px -6px rgba(20, 53, 102, 0.18);
+  border: 1px solid rgba(20, 53, 102, 0.08);
+  margin-bottom: 8px;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(20px) scale(0.92);
+  transform-origin: bottom right;
+  transition: opacity .35s ease, transform .45s cubic-bezier(.2, .8, .2, 1);
+
+  &.shown {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(0) scale(1);
+    animation: tooltipWiggle 4.5s ease-in-out 1.5s infinite;
+  }
+  &.dismissed {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(20px) scale(0.92);
+  }
+
+  @media (max-width: 480px) {
+    display: none;
+  }
+}
+
+.tooltip-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 0;
+  background: rgba(20, 53, 102, 0.08);
+  color: var(--sc-text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background .2s ease, color .2s ease;
+
+  &:hover {
+    background: rgba(20, 53, 102, 0.18);
+    color: var(--sc-primary);
+  }
+}
+
+.tooltip-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  padding-right: 22px;
+
+  .tooltip-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--sc-primary), var(--sc-secondary));
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 3px 10px rgba(20, 53, 102, 0.30);
+    flex-shrink: 0;
+  }
+  .tooltip-title {
+    font-family: var(--sc-font-heading);
+    font-weight: 700;
+    font-size: 0.86rem;
+    color: var(--sc-primary);
+    line-height: 1.1;
+  }
+  .tooltip-status {
+    font-size: 0.68rem;
+    color: var(--sc-text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 2px;
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      background: #4ade80;
+      border-radius: 50%;
+      box-shadow: 0 0 0 2px rgba(74, 222, 128, 0.25);
+      animation: statusBlink 2s ease-in-out infinite;
+    }
+  }
+}
+
+.tooltip-body {
+  margin: 0 0 10px;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: var(--sc-text);
+}
+
+.tooltip-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  background: linear-gradient(135deg, var(--sc-primary), var(--sc-secondary));
+  color: #fff;
+  border: 0;
+  border-radius: 999px;
+  font-family: var(--sc-font-heading);
+  font-size: 0.76rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform .25s ease, box-shadow .25s ease;
+  box-shadow: 0 4px 12px rgba(20, 53, 102, 0.25);
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(20, 53, 102, 0.35);
+  }
+}
+
+/* Tail/arrow pointing to the FAB */
+.tooltip-tail {
+  position: absolute;
+  bottom: 14px;
+  right: -7px;
+  width: 14px;
+  height: 14px;
+  background: #ffffff;
+  border-right: 1px solid rgba(20, 53, 102, 0.08);
+  border-bottom: 1px solid rgba(20, 53, 102, 0.08);
+  transform: rotate(-45deg);
+}
+
+/* ----- The FAB itself ----- */
+.chat-fab {
+  position: relative;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
   border: 0;
   background: linear-gradient(135deg, var(--sc-primary), var(--sc-secondary));
@@ -13,24 +176,91 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: var(--sc-shadow-md);
+  box-shadow:
+    0 12px 30px -6px rgba(20, 53, 102, 0.45),
+    0 4px 10px rgba(20, 53, 102, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.20);
   cursor: pointer;
-  z-index: 80;
-  transition: transform .2s ease, box-shadow .2s ease;
+  isolation: isolate;
+  animation: fabFloat 4.2s ease-in-out infinite;
+  transition: transform .25s cubic-bezier(.2, .8, .2, 1), box-shadow .25s ease;
 
   &:hover {
-    transform: scale(1.05);
-    box-shadow: var(--sc-shadow-lg);
+    transform: scale(1.08) rotate(-4deg);
+    box-shadow:
+      0 18px 40px -6px rgba(20, 53, 102, 0.55),
+      0 6px 14px rgba(20, 53, 102, 0.3);
   }
-  &.hidden { display: none; }
+  &:active { transform: scale(0.96); }
 
-  .pulse {
+  .fab-icon { position: relative; z-index: 2; }
+
+  /* Three expanding rings — staggered for a heartbeat-like wave */
+  .fab-ring {
     position: absolute;
     inset: 0;
     border-radius: 50%;
     border: 2px solid var(--sc-secondary);
-    animation: scPulse 1.6s ease-in-out infinite;
-    opacity: 0.6;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0;
+    animation: fabRing 2.4s ease-out infinite;
+  }
+  .fab-ring-2 { animation-delay: 0.8s; }
+  .fab-ring-3 { animation-delay: 1.6s; }
+
+  /* Sparkle badge — tiny accent corner */
+  .fab-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #FBBF24, #F59E0B);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow:
+      0 4px 10px rgba(217, 119, 6, 0.45),
+      0 0 0 2px #ffffff;
+    z-index: 3;
+    animation: badgeShine 2.8s ease-in-out infinite;
+  }
+}
+
+/* FAB animations */
+@keyframes fabFloat {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+@keyframes fabRing {
+  0%   { transform: scale(1); opacity: 0.6; border-width: 2px; }
+  80%  { transform: scale(1.7); opacity: 0; border-width: 1px; }
+  100% { transform: scale(1.7); opacity: 0; border-width: 1px; }
+}
+@keyframes badgeShine {
+  0%, 100% { transform: scale(1); box-shadow: 0 4px 10px rgba(217, 119, 6, 0.45), 0 0 0 2px #ffffff; }
+  50%      { transform: scale(1.15); box-shadow: 0 6px 16px rgba(217, 119, 6, 0.65), 0 0 0 2px #ffffff, 0 0 18px rgba(251, 191, 36, 0.6); }
+}
+@keyframes statusBlink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.4; }
+}
+@keyframes tooltipWiggle {
+  0%, 92%, 100% { transform: translateX(0) rotate(0); }
+  94%           { transform: translateX(-3px) rotate(-1deg); }
+  96%           { transform: translateX(3px) rotate(1deg); }
+  98%           { transform: translateX(-2px) rotate(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chat-fab,
+  .fab-ring,
+  .fab-badge,
+  .chat-tooltip.shown {
+    animation: none !important;
   }
 }
 
