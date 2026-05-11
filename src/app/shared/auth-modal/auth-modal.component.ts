@@ -2,7 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { LucideAngularModule, X, Mail, Lock, User, Phone, Eye, EyeOff, Heart } from 'lucide-angular';
+import { LucideAngularModule, X, Mail, Lock, User, Phone, Eye, EyeOff, Heart, HeartPulse, ShieldCheck, Sparkles, Check, ArrowRight } from 'lucide-angular';
 
 import { AuthService } from '../../core/services/auth.service';
 import { UiService } from '../../core/services/ui.service';
@@ -19,7 +19,7 @@ export class AuthModalComponent {
   private router = inject(Router);
   ui = inject(UiService);
 
-  readonly icons = { X, Mail, Lock, User, Phone, Eye, EyeOff, Heart };
+  readonly icons = { X, Mail, Lock, User, Phone, Eye, EyeOff, Heart, HeartPulse, ShieldCheck, Sparkles, Check, ArrowRight };
 
   showPassword = signal(false);
   loading = signal(false);
